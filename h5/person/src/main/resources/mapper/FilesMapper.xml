@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.person.fileService.repository.FilesMapper">
+<resultMap id="BaseResultMap"  type="com.person.web.fs.model.Files" >
+	<result column="originalFileName" property="originalFileName" jdbcType="VARCHAR" />
+	<result column="newFileName" property="newFileName" jdbcType="VARCHAR" />
+	<result column="extension" property="extension" jdbcType="VARCHAR" />
+	<result column="folder" property="folder" jdbcType="VARCHAR" />
+	<result column="webPath" property="webPath" jdbcType="VARCHAR" />
+	<result column="fileType" property="fileType" jdbcType="VARCHAR" />
+	<result column="uploadDate" property="uploadDate" jdbcType="DATE" />
+	<result column="state" property="state" jdbcType="INTEGER" />
+</resultMap> 
+<sql id="Criteria_Where_Clause"> 
+	<where> 
+		<if test="params.originalFileName!=null">
+			 and originalFileName=#{params.originalFileName}
+		</if>
+		<if test="params.newFileName!=null">
+			 and newFileName=#{params.newFileName}
+		</if>
+		<if test="params.extension!=null">
+			 and extension=#{params.extension}
+		</if>
+		<if test="params.filePath!=null">
+			 and filePath=#{params.filePath}
+		</if>
+		<if test="params.fileType!=null">
+			 and fileType=#{params.fileType}
+		</if>
+		<if test="params.uploadDate!=null">
+			 and uploadDate=#{params.uploadDate}
+		</if>
+		<if test="params.state!=null">
+			 and state=#{params.state}
+		</if>
+	</where> 
+</sql> 
+<sql id="Base_Column_List">
+  originalFileName,newFileName,extension,folder,webPath,fileType,uploadDate,state
+</sql> 
+<select id="queryPage" resultMap="BaseResultMap" parameterType="com.person.framework.mybatis.Criteria"> 
+	select 
+	<include refid="Base_Column_List" />
+	from t_files
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+	<if test="orderBy!=null"> 
+		order by ${orderBy} 
+	</if> 
+</select> 
+<select id="queryPageCount" resultType="java.lang.Integer" parameterType="com.person.framework.mybatis.Criteria"> 
+	select count(1) from t_files 
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+</select> 
+<select id="queryEntity" resultMap="BaseResultMap" parameterType="java.lang.String">
+	select 
+	<include refid="Base_Column_List" />
+	from t_files	where newFileName = #{newFileName}
+</select>
+
+<insert id="insert" parameterType="com.person.web.fs.model.Files"> 
+	insert into t_files
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="originalFileName != null"> 
+			originalFileName,
+		</if>
+		<if test="newFileName != null"> 
+			newFileName,
+		</if>
+		<if test="extension != null"> 
+			extension,
+		</if>
+		<if test="folder != null"> 
+			folder,
+		</if>
+		<if test="webPath != null"> 
+			webPath,
+		</if>
+		<if test="fileType != null"> 
+			fileType,
+		</if>
+		<if test="uploadDate != null"> 
+			uploadDate,
+		</if>
+		<if test="state != null"> 
+			state,
+		</if>
+	</trim>
+	values
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="originalFileName != null"> 
+		#{originalFileName},
+	</if>
+	<if test="newFileName != null"> 
+		#{newFileName},
+	</if>
+	<if test="extension != null"> 
+		#{extension},
+	</if>
+	<if test="folder != null"> 
+		#{folder},
+	</if>
+	<if test="webPath != null"> 
+		#{webPath},
+	</if>
+	<if test="fileType != null"> 
+		#{fileType},
+	</if>
+	<if test="uploadDate != null"> 
+		#{uploadDate},
+	</if>
+	<if test="state != null"> 
+		#{state},
+	</if>
+	</trim>
+</insert>
+
+<update id="update" parameterType="java.lang.String">
+	update t_files set state = 1
+	where newFileName=#{newFileName}	
+</update>
+
+<delete id="deleteByCriteria" parameterType="com.person.framework.mybatis.Criteria">
+	delete from t_files
+	<if test="params != null">
+		<include refid="Criteria_Where_Clause" />
+	</if>
+</delete>
+<delete id="deleteById" parameterType="java.lang.String">
+	delete from t_files
+	where newFileName = #{newFileName}
+</delete>
+</mapper>

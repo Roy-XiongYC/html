@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 配置数据库方言 目前只有mysql和oracle两种 -->
+	<properties>
+		<property name="dialect" value="mysql" />
+		<property name="pageSqlId" value=".*Page$" />
+	</properties>
+	
+	<!-- 配置mysql分页拦截器 start -->
+	<plugins>
+		<plugin interceptor="com.person.framework.mybatis.interceptor.PaginationInterceptor"></plugin>
+	</plugins>
+	
+	
+	<!-- mybatis配置文件自动扫描路径  -->
+<!--  	 <property name="mapperLocations" value="classpath:com/person/*/*Mapper.xml"></property> -->
+	
+	
+	<mappers>
+		<!-- blog -->
+		<mapper resource="mapper/BlogAboutMapper.xml" />
+		<mapper resource="mapper/BlogGuestMapper.xml" />
+		<mapper resource="mapper/BlogLearnMapper.xml" />
+		<mapper resource="mapper/BlogLinkMapper.xml" />
+		<mapper resource="mapper/BlogRijiMapper.xml" />
+		<mapper resource="mapper/BlogShuoMapper.xml" />
+		<mapper resource="mapper/BlogUserMapper.xml" />
+		<mapper resource="mapper/BlogXcMapper.xml" />
+		<!-- blog -->
+		
+		<!-- sys -->
+		<mapper resource="mapper/SequenceMapper.xml" />
+		<mapper resource="mapper/SysUserMapper.xml" />
+		<mapper resource="mapper/SysGroupMapper.xml" />
+		<mapper resource="mapper/SysGroupResourceMapper.xml" />
+		<mapper resource="mapper/SysGroupUserMapper.xml" />
+		<mapper resource="mapper/SysResourceMapper.xml" />
+		<mapper resource="mapper/SysDictMapper.xml" />
+		<!-- sys -->
+		
+		<!-- fs -->
+		<mapper resource="mapper/FilesMapper.xml" />
+		<mapper resource="mapper/FileSettingMapper.xml" />
+		<!-- sys -->
+		
+		<!-- school -->
+		<mapper resource="mapper/SchoolProjectMapper.xml" />
+		<mapper resource="mapper/SchoolScoreMapper.xml" />
+		<mapper resource="mapper/SchoolStudentMapper.xml" />
+		<!-- school -->
+	</mappers>
+	
+	
+	
+</configuration>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.person.web.admin.repository.SchoolProjectMapper">
+<resultMap id="BaseResultMap"  type="com.person.web.admin.model.SchoolProject" >
+	<result column="project_id" property="projectId" jdbcType="VARCHAR" />
+	<result column="project_name" property="projectName" jdbcType="VARCHAR" />
+	<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+</resultMap> 
+<sql id="Criteria_Where_Clause"> 
+	<where> 
+		<if test="params.projectId!=null">
+			 and project_id=#{params.projectId}
+		</if>
+		<if test="params.projectName!=null">
+			 and project_name=#{params.projectName}
+		</if>
+		<if test="params.projectNameLike!=null">
+			 and project_name  like
+				CONCAT('%',#{params.projectNameLike},'%')
+		</if>
+		<if test="params.createBy!=null">
+			 and create_by=#{params.createBy}
+		</if>
+		<if test="params.createTime!=null">
+			 and create_time=#{params.createTime}
+		</if>
+	</where> 
+</sql> 
+<sql id="Base_Column_List">
+  project_id,project_name,create_by,create_time
+</sql> 
+<select id="queryPage" resultMap="BaseResultMap" parameterType="com.person.framework.mybatis.Criteria"> 
+	select 
+	<include refid="Base_Column_List" />
+	from t_school_project
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+	<if test="orderBy!=null"> 
+		order by ${orderBy} 
+	</if> 
+</select> 
+<select id="queryPageCount" resultType="java.lang.Integer" parameterType="com.person.framework.mybatis.Criteria"> 
+	select count(1) from t_school_project 
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+</select> 
+<select id="queryEntity" resultMap="BaseResultMap" parameterType="java.lang.String">
+	select 
+	<include refid="Base_Column_List" />
+	from t_school_project	where project_id = #{projectId}
+</select>
+<insert id="insert" parameterType="com.person.web.admin.model.SchoolProject"> 
+	insert into t_school_project
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="projectId != null"> 
+			project_id,
+		</if>
+		<if test="projectName != null"> 
+			project_name,
+		</if>
+		<if test="createBy != null"> 
+			create_by,
+		</if>
+		<if test="createTime != null"> 
+			create_time,
+		</if>
+	</trim>
+	values
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="projectId != null"> 
+		#{projectId},
+	</if>
+	<if test="projectName != null"> 
+		#{projectName},
+	</if>
+	<if test="createBy != null"> 
+		#{createBy},
+	</if>
+	<if test="createTime != null"> 
+		#{createTime},
+	</if>
+	</trim>
+</insert>
+<update id="updateByCriteria" parameterType="com.person.framework.mybatis.Criteria">
+	update t_school_project
+	<set>
+	<if test="record.projectId != null"> 
+		project_id = #{record.projectId},
+	</if>
+	<if test="record.projectName != null"> 
+		project_name = #{record.projectName},
+	</if>
+	<if test="record.createBy != null"> 
+		create_by = #{record.createBy},
+	</if>
+	<if test="record.createTime != null"> 
+		create_time = #{record.createTime},
+	</if>
+	</set>
+	<if test="params != null">
+		<include refid="Criteria_Where_Clause" />
+	</if>
+</update>
+<delete id="deleteByCriteria" parameterType="com.person.framework.mybatis.Criteria">
+	delete from t_school_project
+	<if test="params != null">
+		<include refid="Criteria_Where_Clause" />
+	</if>
+</delete>
+<delete id="deleteById" parameterType="java.lang.String">
+	delete from t_school_project
+	where project_id = #{projectId}
+</delete>
+</mapper>

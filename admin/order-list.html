@@ -1,0 +1,200 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+ <!--/_footer 作为公共模版分离出去-->
+<script src="static/comons/js/commonCs.js"></script>
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>数据字典</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+	订单管理
+	<span class="c-gray en">&gt;</span>
+	订单列表
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<form id="queryform">
+		<div class="text-c">
+			<input type="text" class="input-text" style="width:250px" placeholder="输入联系方式手机号" id="mobile" name="mobile">
+			<input type="text" class="input-text" style="width:250px" placeholder="输入商品信息" id="goodsInfo" name="goodsInfo">
+			<button type="button" onclick="doQuery();return false;" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+			<button type="reset" class="btn btn-primary"> 重置</button>
+		</div>
+	</form>
+
+	<div class="mt-20">
+		<table id = "table1" class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+				<tr class="text-c">
+					
+					<th width="160">ID</th>
+					<th width="60">订单类型</th>
+					<th width="120">用户名称</th>
+					<th width="90">联系方式手机号</th>
+					<th width="300">订单商品信息</th>
+					<th width="50">支付金额(元)</th>				
+					<th width="50">订单金额(元)</th>
+					<th width="60">状态</th>
+					<th width="200">地址</th>		
+					<th >备注</th>					
+					<th width="130">创建时间</th>
+					<th >操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-c">
+					
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script src="static/comons/js/commonJs.js"></script>
+
+<script type="text/javascript">
+sAjaxSource = "http://www.dikachongwu.com/weChat/shopOrder/queryPage";
+
+//查询条件
+//var params = {
+//			dictCode : $('#dictCode').val(),
+//			dictValue : $('#dictValue').val()
+//		};
+
+//字段
+var aoColumns = [
+	
+	{"mData" : "orderId",'sClass' : 'center'},	
+	{"mData" : "orderType",'sClass' : 'center'},	
+	{"mData" : "userName",'sClass' : 'center'},				
+	{"mData" : "mobile",'sClass' : 'center'},				
+	{"mData" : "goodsInfo",'sClass' : 'center'},		
+	{"mData" : "payPrice",'sClass' : 'center'},		
+	{"mData" : "orderPrice",'sClass' : 'center'},	
+	{"mData" : "orderStatus",'sClass' : 'center'},	
+	{"mData" : "addressInfo",'sClass' : 'center'},
+	{"mData" : "remark",'sClass' : 'center'},	
+	{"mData" : "createTime",'sClass' : 'center'},	
+	{"mData" : "createTime",'sClass' : 'center'}
+];
+
+//处理表格
+var fnRowCallback =  function( nRow, aData, iDisplayIndex ) {
+	//操作行 3为减去隐藏td后的列
+	/* Append the grade to the default row class name */
+	var html = '';
+	if(aData.orderType=='10'){
+		$(' td:eq(1)',nRow).html('洗澡美容');
+	}else{
+		$(' td:eq(1)',nRow).html('寄养');
+	}
+	
+	var goodsInfo = JSON.parse(aData.goodsInfo);
+	
+	var info = '';
+
+	info += "<tbody>";
+
+	info += "<tr>";
+	info += "<td>宠物类型</td>";
+	info += "<td>"+ goodsInfo.className +"</td>";
+	info += "</tr>";
+	
+	info += "<tr>";
+	info += "<td>性别</td>";
+	info += "<td>"+ (goodsInfo.sex=='1'?'公':'母')  +"</td>";
+	info += "</tr>";
+	
+	info += "<tr>";
+	info += "<td>宠物昵称</td>";
+	info += "<td>"+ goodsInfo.petName +"</td>";
+	info += "</tr>";
+	
+	info += "<tr>";
+	info += "<td>宠物品种</td>";
+	info += "<td>"+ goodsInfo.varietiesName +"</td>";
+	info += "</tr>";
+	
+	info += "<tr>";
+	info += "<td>宠物体型</td>";
+	info += "<td>"+ goodsInfo.petInfo +"</td>";
+	info += "</tr>";
+	
+	info += "<tr>";
+	info += "<td>疫苗信息</td>";
+	info += "<td>"+ (goodsInfo.sterilization ? '已打疫苗':'未打疫苗') +"</td>";
+	info += "</tr>";
+	
+	info += "<tr>";
+	info += "<td>服务项目</td>";
+	info += "<td>"+ goodsInfo.projectName +"</td>";
+	info += "</tr>";
+	
+	info += "<tr>";
+	info += "<td>服务时间</td>";
+	if(goodsInfo.startFosterTime){
+		info += "<td>"+ goodsInfo.startFosterTime + ' 至 '+ goodsInfo.endFosterTime + " ("+ goodsInfo.dayNum +" 天)"+"</td>";
+	}else{
+		info += "<td>"+ goodsInfo.appointedTime +"</td>";
+	}
+	info += "</tr>";
+	
+	info += "<tr>";
+	info += "<td>服务方式</td>";
+	info += "<td>"+ (goodsInfo.pickUp =='0'?'到店服务':'上门接送') +"</td>";
+	info += "</tr>";
+	
+	info += "<tr>";
+	info += "<td>服务价格</td>";
+	info += "<td>"+ goodsInfo.price +"</td>";
+	info += "</tr>";
+
+	info += "</tbody>";
+	
+	$(' td:eq(4)',nRow).html(info);
+	
+	//10 待付款 20 待收货 30 已完成 40 已取消 50已支付 60s申请预约 70 预约成功
+	var orderStatus;
+	if(aData.orderStatus=='10'){
+		orderStatus = "待付款";
+	}else if(aData.orderStatus=='20'){
+		orderStatus = "待收货";
+	}else if(aData.orderStatus=='30'){
+		orderStatus = "已完成";
+	}else if(aData.orderStatus=='40'){
+		orderStatus = "已取消";
+	}else if(aData.orderStatus=='50'){
+		orderStatus = "已支付";
+	}else if(aData.orderStatus=='60'){
+		orderStatus = "申请预约";
+		html = app.addButton.updateStatus('确认预约？','&#xe615;','updateStatus','http://www.dikachongwu.com/weChat/shopOrder/updateStatus/',aData.orderId,"70");
+		html += '  ' + app.addButton.updateStatus('取消预约？','&#xe60b;','updateStatus','http://www.dikachongwu.com/weChat/shopOrder/updateStatus/',aData.orderId,"40");
+	}else if(aData.orderStatus=='70'){
+		orderStatus = "预约成功";
+	}else{
+		orderStatus = aData.orderStatus;
+	}
+	$(' td:eq(27)',nRow).html(orderStatus);
+	
+	$(' td:eq(31)',nRow).html(html);
+	return nRow;
+};
+</script>
+<script type="text/javascript" src="static/comons/js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.person.web.admin.repository.SysResourceMapper">
+<resultMap id="BaseResultMap"  type="com.person.web.admin.model.SysResource" >
+	<result column="resource_id" property="resourceId" jdbcType="VARCHAR" />
+	<result column="resource_code" property="resourceCode" jdbcType="VARCHAR" />
+	<result column="resource_name" property="resourceName" jdbcType="VARCHAR" />
+	<result column="resource_type" property="resourceType" jdbcType="INTEGER" />
+	<result column="url" property="url" jdbcType="VARCHAR" />
+	<result column="parent_resource_id" property="parentResourceId" jdbcType="VARCHAR" />
+	<result column="order_number" property="orderNumber" jdbcType="INTEGER" />
+	<result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	<result column="icon_class" property="iconClass" jdbcType="VARCHAR" />
+	
+	<result column="access_auth" property="accessAuth" jdbcType="INTEGER" />
+</resultMap> 
+<sql id="Criteria_Where_Clause"> 
+	<where> 
+		<if test="params.resourceId!=null">
+			 and resource_id=#{params.resourceId}
+		</if>
+		<if test="params.resourceCode!=null">
+			 and resource_code=#{params.resourceCode}
+		</if>
+		<if test="params.resourceName!=null">
+			 and resource_name=#{params.resourceName}
+		</if>
+		<if test="params.resourceName_like!=null">
+			 and resource_name like
+				CONCAT('%',#{params.resourceName_like},'%')
+		</if>
+		<if test="params.resourceType!=null">
+			 and resource_type=#{params.resourceType}
+		</if>
+		<if test="params.url!=null">
+			 and url=#{params.url}
+		</if>
+		<if test="params.parentResourceId!=null">
+			 and parent_resource_id=#{params.parentResourceId}
+		</if>
+		<if test="params.orderNumber!=null">
+			 and order_number=#{params.orderNumber}
+		</if>
+		<if test="params.createBy!=null">
+			 and create_by=#{params.createBy}
+		</if>
+		<if test="params.createTime!=null">
+			 and create_time=#{params.createTime}
+		</if>
+		<if test="params.groupId!=null">
+			and g.group_id = #{params.groupId}
+		</if>
+	</where> 
+</sql> 
+<sql id="Base_Column_List">
+  resource_id,resource_code,resource_name,resource_type,url,parent_resource_id,order_number,create_by,create_time,icon_class
+</sql> 
+<select id="queryPage" resultMap="BaseResultMap" parameterType="com.person.framework.mybatis.Criteria"> 
+	select 
+	 r.resource_id,resource_code,resource_name,resource_type,url,parent_resource_id,order_number,r.create_by,r.create_time,icon_class
+	from t_sys_resource r
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+	<if test="orderBy!=null"> 
+		order by ${orderBy} 
+	</if> 
+</select> 
+<select id="queryPageNoLimit" resultMap="BaseResultMap" parameterType="com.person.framework.mybatis.Criteria"> 
+	select 
+	 r.resource_id,resource_code,resource_name,resource_type,url,parent_resource_id,order_number,r.create_by,r.create_time,icon_class
+	from t_sys_resource r
+	left join t_sys_group_resource g
+		on r.resource_id=g.resource_id
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+	<if test="orderBy!=null"> 
+		order by ${orderBy} 
+	</if> 
+</select>
+<select id="queryAllPage" resultMap="BaseResultMap" parameterType="com.person.framework.mybatis.Criteria"> 
+	select 
+	 resource_id,resource_code,resource_name,resource_type,url,parent_resource_id,order_number,create_by,create_time,icon_class
+	from t_sys_resource
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+	<if test="orderBy!=null"> 
+		order by ${orderBy} 
+	</if> 
+</select>
+<select id="queryPageCount" resultType="java.lang.Integer" parameterType="com.person.framework.mybatis.Criteria"> 
+	select count(1) from t_sys_resource 
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+</select>
+<select id="queryByGroup" resultMap="BaseResultMap" parameterType="com.person.framework.mybatis.Criteria"> 
+	select r.resource_id,resource_code,resource_name,resource_type,parent_resource_id,g.access_auth from t_sys_resource r 
+	left join (select group_id,access_auth,resource_id from t_sys_group_resource where group_id=#{params.groupId}) as g on g.resource_id = r.resource_id
+	<if test="params.accessAuth != null"> 
+		<where>
+			<if test="params.accessAuth != ''">
+				<if test="params.accessAuth == 0">
+					and (g.access_auth is null or g.access_auth = 0)
+				</if>
+				<if test="params.accessAuth == 1">
+					and (g.access_auth is not null or g.access_auth != 0)
+				</if>
+			</if>
+		</where>
+	</if> 
+</select>  
+<select id="queryEntity" resultMap="BaseResultMap" parameterType="java.lang.String">
+	select 
+	<include refid="Base_Column_List" />
+	from t_sys_resource	where resource_id = #{resourceId}
+</select>
+<insert id="insert" parameterType="com.person.web.admin.model.SysResource"> 
+	insert into t_sys_resource
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="resourceId != null"> 
+			resource_id,
+		</if>
+		<if test="resourceCode != null"> 
+			resource_code,
+		</if>
+		<if test="resourceName != null"> 
+			resource_name,
+		</if>
+		<if test="resourceType != null"> 
+			resource_type,
+		</if>
+		<if test="url != null"> 
+			url,
+		</if>
+		<if test="parentResourceId != null"> 
+			parent_resource_id,
+		</if>
+		<if test="orderNumber != null"> 
+			order_number,
+		</if>
+		<if test="createBy != null"> 
+			create_by,
+		</if>
+		<if test="createTime != null"> 
+			create_time,
+		</if>
+		<if test="iconClass != null"> 
+			icon_class,
+		</if>
+	</trim>
+	values
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="resourceId != null"> 
+		#{resourceId},
+	</if>
+	<if test="resourceCode != null"> 
+		#{resourceCode},
+	</if>
+	<if test="resourceName != null"> 
+		#{resourceName},
+	</if>
+	<if test="resourceType != null"> 
+		#{resourceType},
+	</if>
+	<if test="url != null"> 
+		#{url},
+	</if>
+	<if test="parentResourceId != null"> 
+		#{parentResourceId},
+	</if>
+	<if test="orderNumber != null"> 
+		#{orderNumber},
+	</if>
+	<if test="createBy != null"> 
+		#{createBy},
+	</if>
+	<if test="createTime != null"> 
+		#{createTime},
+	</if>
+	<if test="iconClass != null"> 
+		#{iconClass},
+	</if>
+	</trim>
+</insert>
+<update id="updateByCriteria" parameterType="com.person.framework.mybatis.Criteria">
+	update t_sys_resource
+	<set>
+	<if test="record.resourceId != null"> 
+		resource_id = #{record.resourceId},
+	</if>
+	<if test="record.resourceCode != null"> 
+		resource_code = #{record.resourceCode},
+	</if>
+	<if test="record.resourceName != null"> 
+		resource_name = #{record.resourceName},
+	</if>
+	<if test="record.resourceType != null"> 
+		resource_type = #{record.resourceType},
+	</if>
+	<if test="record.url != null"> 
+		url = #{record.url},
+	</if>
+	<if test="record.parentResourceId != null"> 
+		parent_resource_id = #{record.parentResourceId},
+	</if>
+	<if test="record.orderNumber != null"> 
+		order_number = #{record.orderNumber},
+	</if>
+	<if test="record.createBy != null"> 
+		create_by = #{record.createBy},
+	</if>
+	<if test="record.createTime != null"> 
+		create_time = #{record.createTime},
+	</if>
+	<if test="record.iconClass != null"> 
+		icon_class = #{record.iconClass},
+	</if>
+	</set>
+	<if test="params != null">
+		<include refid="Criteria_Where_Clause" />
+	</if>
+</update>
+<delete id="deleteByCriteria" parameterType="com.person.framework.mybatis.Criteria">
+	delete from t_sys_resource
+	<if test="params != null">
+		<include refid="Criteria_Where_Clause" />
+	</if>
+</delete>
+<delete id="deleteById" parameterType="java.lang.String">
+	delete from t_sys_resource
+	where resource_id = #{resourceId}
+</delete>
+</mapper>

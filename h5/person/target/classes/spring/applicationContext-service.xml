@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+	
+	<!-- fs -->
+	<bean id="fileService" class="com.person.web.fs.service.FileService">
+		<property name="filesRepositoryImpl" ref="filesRepositoryImpl"></property>
+		<property name="fileSettingRepositoryImpl" ref="fileSettingRepositoryImpl"></property>	
+		<property name="messageService" ref="messageService"></property>	
+	</bean>
+	<!-- fs -->
+	
+	<!-- blog -->
+	<bean id="blogUserService" class="com.person.web.blog.service.impl.BlogUserServiceImpl">
+		<property name="blogUserRepository" ref="blogUserRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="blogLinkService" ref="blogLinkService"></property>
+		<property name="blogLearnService" ref="blogLearnService"></property>
+		<property name="blogAboutService" ref="blogAboutService"></property>
+		<property name="sequenceService" ref="sequenceService"></property>
+		<property name="fileBill" ref="fileService"></property>
+	</bean>
+	<bean id="blogLinkService" class="com.person.web.blog.service.impl.BlogLinkServiceImpl">
+		<property name="blogLinkRepository" ref="blogLinkRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="sequenceService" ref="sequenceService"></property>
+		<property name="blogUserService" ref="blogUserService"></property>
+	</bean>
+	<bean id="blogAboutService" class="com.person.web.blog.service.impl.BlogAboutServiceImpl">
+		<property name="blogAboutRepository" ref="blogAboutRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+	</bean>
+	<bean id="blogShuoService" class="com.person.web.blog.service.impl.BlogShuoServiceImpl">
+		<property name="blogShuoRepository" ref="blogShuoRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="blogUserService" ref="blogUserService"></property>
+	</bean>
+	<bean id="blogRijiService" class="com.person.web.blog.service.impl.BlogRijiServiceImpl">
+		<property name="blogRijiRepository" ref="blogRijiRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="blogUserService" ref="blogUserService"></property>
+	</bean>
+	<bean id="blogLearnService" class="com.person.web.blog.service.impl.BlogLearnServiceImpl">
+		<property name="blogLearnRepository" ref="blogLearnRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="sequenceService" ref="sequenceService"></property>
+		<property name="fileBill" ref="fileService"></property>
+		<property name="blogUserService" ref="blogUserService"></property>
+	</bean>
+	<bean id="blogGuestService" class="com.person.web.blog.service.impl.BlogGuestServiceImpl">
+		<property name="blogGuestRepository" ref="blogGuestRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+	</bean>
+	<bean id="blogXcService" class="com.person.web.blog.service.impl.BlogXcServiceImpl">
+		<property name="blogXcRepository" ref="blogXcRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="sequenceService" ref="sequenceService"></property>
+		<property name="blogUserService" ref="blogUserService"></property>
+		<property name="fileBill" ref="fileService"></property>
+	</bean>
+	<!-- blog -->
+
+	<!-- sys -->
+	<bean id="sequenceService" class="com.person.web.blog.service.impl.SequenceService">
+		<property name="sequenceRepository" ref="sequenceRepository"></property>
+	</bean>
+
+	<bean id="sysGroupResourceService"
+		class="com.person.web.admin.service.impl.SysGroupResourceServiceImpl">
+		<property name="sysGroupResourceRepository" ref="sysGroupResourceRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="resourceService" ref="sysResourceService"></property>
+		<property name="sequenceService" ref="sequenceService"></property>
+	</bean>
+	<bean id="sysResourceService"
+		class="com.person.web.admin.service.impl.SysResourceServiceImpl">
+		<property name="sysResourceRepository" ref="sysResourceRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="groupUserRepository" ref="sysGroupUserRepository"></property>
+		<property name="sysDictService" ref="sysDictService"></property>
+	</bean>
+	<bean id="sysGroupUserService"
+		class="com.person.web.admin.service.impl.SysGroupUserServiceImpl">
+		<property name="sysGroupUserRepository" ref="sysGroupUserRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+	</bean>
+	<bean id="sysGroupService" class="com.person.web.admin.service.impl.SysGroupServiceImpl">
+		<property name="sysGroupRepository" ref="sysGroupRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="sysDictService" ref="sysDictService"></property>
+		<property name="sequenceService" ref="sequenceService"></property>
+	</bean>
+	<bean id="sysUserService" class="com.person.web.admin.service.impl.SysUserServiceImpl">
+		<property name="sysUserRepository" ref="sysUserRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="sysDictService" ref="sysDictService"></property>
+	</bean>
+	<bean id="sysDictService" class="com.person.web.admin.service.impl.SysDictServiceImpl">
+		<property name="sysDictRepository" ref="sysDictRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="sequenceService" ref="sequenceService"></property>
+	</bean>
+	<!-- sys -->
+	
+	<!-- school -->
+	<bean id="schoolScoreService" class="com.person.web.admin.service.impl.SchoolScoreServiceImpl">
+		<property name="schoolScoreRepository" ref="schoolScoreRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="sysDictService" ref="sysDictService"></property>
+		<property name="sequenceService" ref="sequenceService"></property>
+		<property name="schoolStudentService" ref="schoolStudentService"></property>
+	</bean>
+	<bean id="schoolStudentService" class="com.person.web.admin.service.impl.SchoolStudentServiceImpl">
+		<property name="schoolStudentRepository" ref="schoolStudentRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="sysDictService" ref="sysDictService"></property>
+	<property name="sequenceService" ref="sequenceService"></property>
+	</bean>
+	<bean id="schoolProjectService" class="com.person.web.admin.service.impl.SchoolProjectServiceImpl">
+		<property name="schoolProjectRepository" ref="schoolProjectRepository"></property>
+		<property name="messageService" ref="messageService"></property>
+		<property name="sysDictService" ref="sysDictService"></property>
+	<property name="sequenceService" ref="sequenceService"></property>
+	</bean>
+	<!-- school -->
+	
+	<!-- 个别单独的 -->
+	<!-- 用户菜单信息 -->
+	<bean id="userResource" class="com.person.framework.web.UserResource"></bean>
+</beans>

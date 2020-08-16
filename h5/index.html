@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <title>迪卡宠物生活馆</title>
+    <link rel="stylesheet" href="./style/weui.css"/>
+    <link rel="stylesheet" href="./example.css"/>
+</head>
+<body ontouchstart>
+<div class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
+
+<div class="container" id="container"></div>
+
+<script type="text/html" id="tpl_home">
+    <div class="page">
+            <div class="weui-tab">
+				<div class="weui-navbar c0">
+					<div class="weui-navbar__item weui-nav-green weui-bar__item_on" id="c00" >
+						美容洗澡
+					</div>
+					<div class="weui-navbar__item" id="c01" >
+						寄养
+					</div>
+				</div>
+                <div class="weui-tab__panel">
+
+                    <div class="c00 weui-form">
+                        <!--<div class="weui-form__text-area">
+                            <h2 class="weui-form__title">模拟选择框</h2>
+                            <div class="weui-form__desc">用于丰富原生选择框结构，使其更具有扩展性</div>
+                        </div>-->
+                        <!--<<div class="weui-form__control-area">-->
+                        <div class="page__bd page__bd_spacing">
+
+                        </div>
+                        
+                            <div class="weui-cells__group weui-cells__group_form">
+                                <div class="weui-cells weui-form__control-area">
+									
+									<div class="weui-cell weui-cell_active weui-cell_access  weui-cell_select-after">
+                                        <div class="weui-cell__bd">
+                                            宠物                                           
+                                        </div>
+										<input type = "hidden" id = "petId"></input>
+                                        <div class="weui-cell__ft" id="showPicker3"  onclick= "choicePets(this)" >
+                                           请选择
+                                        </div>
+										<div class="page__bd page__bd_spacing button-sp-area" style="padding-top: 5px;">
+											<a href="#form_page" class="weui-btn weui-btn_mini weui-btn_primary">添加宠物</a>   									
+										</div>
+                                    </div>
+                                    
+
+                                    <div class="weui-cell weui-cell_active weui-cell_access  weui-cell_select-after">
+                                        <div class="weui-cell__bd">
+                                            服务项目
+                                            <!--<img src="./images/glyphicons-basic-227-dollar.png" alt="" style="margin-bottom: -8px;" class="weui-tabbar__icon">
+                                            <a class="c0 weui-cell__hd js_item" data-id="full" href="javascript:">价目表</a>>-->
+                                        </div>
+
+                                        <div class="weui-cell__ft" id="serviceClass" onclick="servicePro(this,'10')" >
+                                           请选择
+                                        </div>
+                                    </div>
+
+                                    <div class="weui-cell weui-cell_active weui-cell_access" id="showDatePicker">
+                                        <div class="weui-cell__bd">预约时间</div>
+                                        <div class="weui-cell__ft" id="appointedTime" ></div>
+                                    </div>
+
+                                    <div class="weui-cell weui-cell_active weui-check__label" for="x11">
+                                        <div class="weui-cell__bd">
+                                            疫苗情况
+
+                                            <a class="c0 weui-cell__hd js_item"  href="javascript:">按期接种疫苗请勾选-></a>
+                                        </div>
+
+                                        <div class="weui-cell__ft weui-cell__hd weui-cells_checkbox">
+                                            <input type="checkbox" class="weui-check" name="checkbox1" id="vaccines" checked="checked"/>
+                                            <i class="weui-icon-checked" onclick="checkBoxS11(this)" ></i>
+                                         </div>
+                                    </div>
+
+									<div class="weui-cell weui-cell_active weui-cell_access weui-cells weui-cells_radio" >
+                                        <div class="weui-cell__bd">上门接送</div>
+                                        <div class="weui-cell weui-cell_active weui-check__label" id = "serviceType">
+                                            <input type="radio" name="radio1" class="weui-check weui-cells_radio" id="x12" checked="checked" value = "0" />
+                                            <span class="weui-icon-checked" onclick="radioBox(this)" ></span>
+                                            到店服务
+
+                                            <input type="radio" name="radio2" class="weui-check weui-cells_radio iradio_square-orange" id="x13" value = "1" />
+                                            <span class="weui-icon-checked" onclick="radioBox(this)"></span>
+                                            上门接送
+                                        </div>
+                                    </div>
+
+                                    <div class="weui-form__control-area weui-cells__group weui-cells__group_form" >
+                                        <div class="weui-cells__title">备注</div>
+                                        <div class="weui-cells weui-cells_form">
+                                            <div class="weui-cell ">
+                                                <div class="weui-cell__bd">
+                                                    <textarea id = "remark" class="weui-textarea" placeholder="请描述你的问题" rows="3"></textarea>
+                                                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!--<div class="weui-cell weui-cell_active weui-cell_access weui-cell_select weui-cell_select-before">
+                                        <div class="weui-cell__hd" id="showPhone"><label class="weui-label">+86</label></div>
+                                        <div class="weui-cell__bd">
+                                            <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入号码" value="12345678907"/>
+                                        </div>
+                                    </div>-->
+									
+                                </div>
+								<div class="weui-form__opr-area">
+								  <a class="weui-btn weui-btn_primary" onclick = "addOrder()">提交预约</a>
+								</div>
+								<div class="weui-form__tips-area" >
+								  <p class="weui-form__tips">
+									1、计算价格仅供参考，以店面实际收费为准。
+									</br>					
+									2、预约订单审核通过后会有微信/短信提醒。
+								  </p>
+								</div>
+								
+                            </div>
+
+							<div id="succ_toast" style="display: none;">
+								<div class="weui-mask_transparent"></div>
+								<div class="weui-toast">
+									<i class="weui-icon-success-no-circle weui-icon_toast"></i>
+									<p class="weui-toast__content">预约成功</p>
+								</div>
+							</div>
+							
+							<div id="fail_toast" style="display: none;">
+								<div class="weui-mask_transparent"></div>
+								<div class="weui-toast">
+									<i class="weui-icon-warn weui-icon_toast"></i>
+									<p class="weui-toast__content" id = 'errorText'>请填写完内容</p>
+								</div>
+							</div>
+                    </div>
+
+					<div class="c01 weui-form" style="display: none;">
+                        <!--<div class="weui-form__text-area">
+                            <h2 class="weui-form__title">模拟选择框</h2>
+                            <div class="weui-form__desc">用于丰富原生选择框结构，使其更具有扩展性</div>
+                        </div>-->
+                        <!--<<div class="weui-form__control-area">-->
+                        <div class="page__bd page__bd_spacing">
+
+                        </div>
+                        
+                            <div class="weui-cells__group weui-cells__group_form">
+                                <div class="weui-cells weui-form__control-area">
+									
+									<div class="weui-cell weui-cell_active weui-cell_access  weui-cell_select-after">
+                                        <div class="weui-cell__bd">
+                                            宠物                                           
+                                        </div>
+										<input type = "hidden" id = "petId1"></input>
+                                        <div class="weui-cell__ft" onclick = "choicePets(this)" >
+                                           请选择
+                                        </div>
+										<div class="page__bd page__bd_spacing button-sp-area" style="padding-top: 5px;">
+											<a href="#form_page" class="weui-btn weui-btn_mini weui-btn_primary">添加宠物</a>   									
+										</div>
+                                    </div>
+									
+									<div class="weui-cell weui-cell_active weui-cell_access  weui-cell_select-after">
+                                        <div class="weui-cell__bd">
+                                            服务项目
+                                        </div>
+
+                                        <div class="weui-cell__ft" id="serviceClass1" onclick="servicePro(this,'20')"  >
+                                           请选择
+                                        </div>
+                                    </div>
+									
+									<div class="weui-cell weui-cell_active weui-cell_access" id="showDatePicker1">
+                                        <div class="weui-cell__bd">寄养日期</div>
+                                        <div class="weui-cell__ft" id="fosterTime"></div>
+										<input type = "hidden" id="startFosterTime"></input>
+										<input type = "hidden" id="endFosterTime" ></input>
+                                    </div>
+									
+									<div class="weui-cell weui-cell_active weui-check__label" for="x11">
+                                        <div class="weui-cell__bd">
+                                            疫苗情况
+                                            <a class="c0 weui-cell__hd js_item"  href="javascript:">按期接种疫苗请勾选-></a>
+                                        </div>
+
+                                        <div class="weui-cell__ft weui-cell__hd weui-cells_checkbox">
+                                            <input type="checkbox" class="weui-check" name="checkbox1" id="vaccines1" checked="checked"/>
+                                            <i class="weui-icon-checked" onclick="checkBoxS11(this)" ></i>
+                                         </div>
+                                    </div>
+									
+									<!--<div class="weui-cell weui-cell_active">
+										<div class="weui-cell__hd"><label class="weui-label">数量</label></div>
+										<div class="weui-cell__bd">
+											<input id="js_input" class="weui-input" type="number" value = "1"/>
+										</div>
+									</div>-->
+
+                                    
+									
+									<div class="weui-cell weui-cell_active weui-cell_access weui-cells weui-cells_radio" >
+                                        <div class="weui-cell__bd">上门接送</div>
+                                        <div class="weui-cell weui-cell_active weui-check__label" id = "serviceType1">
+                                            <input type="radio" name="radio1" class="weui-check weui-cells_radio" id="x12" checked="checked" value = "0" />
+                                            <span class="weui-icon-checked" onclick="radioBox(this)" ></span>
+                                            到店服务
+
+                                            <input type="radio" name="radio2" class="weui-check weui-cells_radio iradio_square-orange" id="x13" value = "1" />
+                                            <span class="weui-icon-checked" onclick="radioBox(this)"></span>
+                                            上门接送
+                                        </div>
+                                    </div>
+									
+									<div class="weui-cell weui-cell_active">
+										<div class="weui-cell__hd"><label class="weui-label">接送地址</label></div>
+										<div class="weui-cell__bd">
+											<input id="addressInfo" class="weui-input" placeholder="填写接送地址"/>
+										</div>
+									</div>
+								
+									
+									<div class="weui-form__control-area weui-cells__group weui-cells__group_form" >
+                                        <div class="weui-cells__title">备注</div>
+                                        <div class="weui-cells weui-cells_form">
+                                            <div class="weui-cell ">
+                                                <div class="weui-cell__bd">
+                                                    <textarea id = "remark1" class="weui-textarea" placeholder="请描述你的问题" rows="3"></textarea>
+                                                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+									
+
+                                    <!--<div class="weui-cell weui-cell_active weui-cell_access weui-cell_select weui-cell_select-before">
+                                        <div class="weui-cell__hd" id="showPhone"><label class="weui-label">+86</label></div>
+                                        <div class="weui-cell__bd">
+                                            <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入号码" value="12345678907"/>
+                                        </div>
+                                    </div>-->
+									
+                                </div>
+								<div class="weui-form__opr-area">
+								  <a class="weui-btn weui-btn_primary " onclick = "addOrder1()">提交预约</a>
+								</div>
+								<div class="weui-form__tips-area" >
+								  <p class="weui-form__tips">
+									1、计算价格仅供参考，以店面实际收费为准。
+									</br>					
+									2、预约订单审核通过后会有微信/短信提醒。
+								  </p>
+								</div>
+								
+                            </div>
+						    <div id="js_toast" style="display: none;">
+							    <div class="weui-mask_transparent"></div>
+								<div class="weui-toast">
+								  <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+								  <p class="weui-toast__content">预约成功</p>
+							    </div>
+						    </div>
+                       
+                    </div>
+					<div id="succ_toast1" style="display: none;">
+						<div class="weui-mask_transparent"></div>
+						<div class="weui-toast">
+							<i class="weui-icon-success-no-circle weui-icon_toast"></i>
+							<p class="weui-toast__content">预约成功</p>
+						</div>
+					</div>
+					
+					<div id="fail_toast1" style="display: none;">
+						<div class="weui-mask_transparent"></div>
+						<div class="weui-toast">
+							<i class="weui-icon-warn weui-icon_toast"></i>
+							<p class="weui-toast__content" id = 'errorText1'>请填写完内容</p>
+						</div>
+					</div>
+                    <!--<a class="c0 weui-tab__content weui-cell weui-cell_active weui-cell_access js_item" data-id="msg" href="javascript:">
+                                <div class="weui-cell__bd">
+                                    <p>Msg</p>
+                                </div>
+                                <div class="weui-cell__ft"></div>
+                    </a>-->
+
+                    <div  class="c1 weui-tab__content weui-msg">
+						<div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+						<div class="weui-msg__text-area">
+							<h2 class="weui-msg__title">功能暂未开放,敬请期待...</h2>		
+						</div>	
+					</div>
+					<div  class="c2 weui-tab__content weui-msg">
+						<div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+						<div class="weui-msg__text-area">
+							<h2 class="weui-msg__title">功能暂未开放,敬请期待...</h2>		
+						</div>	
+					</div>
+					<div  class="c3 weui-tab__content weui-msg">
+						<div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+						<div class="weui-msg__text-area">
+							<h2 class="weui-msg__title">功能暂未开放,敬请期待...</h2>		
+						</div>	
+					</div>
+					<div  class="c4 weui-tab__content weui-msg">
+						<div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+						<div class="weui-msg__text-area">
+							<h2 class="weui-msg__title">功能暂未开放,敬请期待...</h2>		
+						</div>	
+					</div>
+                    
+
+
+                </div>
+                <div class="weui-tabbar">
+
+                    <div class="weui-tabbar__item weui-bar__item_on" id="c0">
+                        <div style="display: inline-block; position: relative;">
+                            <img src="./images/glyphicons-basic-553-hand-heart.png" alt=""
+                                 class="weui-tabbar__icon">
+                            <span class="weui-badge" style="position: absolute; top: -2px; right: -13px;">8</span>
+                        </div>
+                        <p class="weui-tabbar__label">服务预约</p>
+                    </div>
+                    <div class="weui-tabbar__item" id="c1">
+                        <img src="./images/glyphicons-basic-158-thumbnails-small.png" alt="" class="weui-tabbar__icon">
+                        <p class="weui-tabbar__label">商品</p>
+                    </div>
+                    <div class="weui-tabbar__item" id="c1">
+                        <img src="./images/glyphicons-basic-205-cart-check.png" alt="" class="weui-tabbar__icon">
+                        <p class="weui-tabbar__label">购物车</p>
+                    </div>
+
+                    <div class="weui-tabbar__item" id="c2">
+                        <div style="display: inline-block; position: relative;">
+                            <img src="./images/glyphicons-basic-159-thumbnails-list.png" alt=""
+                                 class="weui-tabbar__icon">
+                            <span class="weui-badge weui-badge_dot"
+                                  style="position: absolute; top: 0; right: -6px;"></span>
+                        </div>
+                        <p class="weui-tabbar__label">订单</p>
+                    </div>
+                    <div class="weui-tabbar__item" id="c3">
+                        <img src="./images/glyphicons-basic-4-user.png" alt="" class="weui-tabbar__icon">
+                        <p class="weui-tabbar__label">我</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+				/**
+		 * [获取URL中的参数名及参数值的集合]
+		 * 示例URL:http://htmlJsTest/getrequest.html?uid=admin&rid=1&fid=2&name=小明
+		 * @param {[string]} urlStr [当该参数不为空的时候，则解析该url中的参数集合]
+		 * @return {[string]}       [参数集合]
+		 */
+		function GetRequest() {	
+			var url = decodeURI(location.search); //获取url中"?"符后的字符串
+			var theRequest = new Object();
+			if (url.indexOf("?") != -1) {
+				var str = url.substr(1);
+				strs = str.split("&");
+				for (var i = 0; i < strs.length; i++) {
+					theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+				}
+			}
+			return theRequest;
+		}
+
+      $('#showTooltips').on('click', function(){
+        if ($(this).hasClass('weui-btn_disabled')) return;
+
+        // toptips的fixed, 如果有`animation`, `position: fixed`不生效
+        $('.page.cell').removeClass('slideIn');
+
+        $toast.fadeIn(100);
+        setTimeout(function () {
+          $toast.fadeOut(100);
+        }, 2000);
+      });
+
+        //复选框点击效果
+        function checkBoxS11(_this) {
+			var ele = _this;
+			//debugger;
+            $(ele).prev().prop("checked",!$(ele).prev().get(0).checked);
+        }
+
+
+        //复选框点击效果
+        function radioBox(_this) {
+		    var ele = _this;
+            var parent = $(ele).parent();
+            $(parent).children("input").prop("checked",false);
+            $(ele).prev().prop("checked",true);
+        }
+		
+		
+		function addOrder1(){
+	
+			var $succ_toast = $('#succ_toast1');
+			var $fail_toast = $('#fail_toast1');
+			//debugger;
+			
+			//昵称
+			if(!$('#petId1').val()){
+				$('#errorText1').text('请选择宠物！');
+				$fail_toast.fadeIn(100);
+				setTimeout(function () {
+					$fail_toast.fadeOut(100);
+				}, 2000);
+				return;
+			}
+			
+			//服务项目
+			if(!$('#serviceClass1').prev().val()){
+				$('#errorText1').text('请选择服务项目！');
+				$fail_toast.fadeIn(100);
+				setTimeout(function () {
+					$fail_toast.fadeOut(100);
+				}, 2000);
+				return;
+			}
+			
+			
+			//寄养日期
+			if(!$('#startFosterTime').val()){
+				$('#errorText1').text('请选择寄养日期！');
+				$fail_toast.fadeIn(100);
+				setTimeout(function () {
+					$fail_toast.fadeOut(100);
+				}, 2000);
+				return;
+			}
+			
+			//服务类型
+			if( $($('#serviceType1').children("input[type=radio]:checked")[0]).length == 0){
+				$('#errorText1').text('请选择接送方式！');
+				$fail_toast.fadeIn(100);
+				setTimeout(function () {
+					$fail_toast.fadeOut(100);
+				}, 2000);
+				return;
+			}
+			
+			//接送地址
+			if(!$('#addressInfo').val()){
+				$('#errorText1').text('请填写接送地址！');
+				$fail_toast.fadeIn(100);
+				setTimeout(function () {
+					$fail_toast.fadeOut(100);
+				}, 2000);
+				return;
+			}
+
+
+			
+			//上门接送 $($('#serviceType').children("input[type=radio]:checked")[0]).val()
+			//是否打疫苗 $("#s11").get(0).checked
+			//备注  $('#remark').val()
+						
+			var goodsInfo = {
+				"petId": $('#petId1').val(),
+				"serviceId": $('#serviceClass1').prev().val(),
+				"pickUp": $($('#serviceType1').children("input[type=radio]:checked")[0]).val(),
+				"vaccines": $("#vaccines1").get(0).checked,
+				"startFosterTime": $('#startFosterTime').val(),
+				"endFosterTime": $('#endFosterTime').val(),
+				"dayNum": parseInt(Math.abs(new Date($('#endFosterTime').val()).getTime() - new Date($('#startFosterTime').val()).getTime()) / 1000 / 60 / 60 / 24) +1			
+			};
+			debugger;
+			var params = {			  
+			  "orderType": "20",
+			  "userId": GetRequest().userId,
+			  "goodsInfo": JSON.stringify(goodsInfo ),
+			  "remark": $('#remark1').val(),
+			  "addressInfo": $('#addressInfo').val()
+			};
+			
+			$.ajax({
+			"type" : 'POST',
+			"url" : 'http://www.dikachongwu.com/weChat/shopOrder/addOrUpdate',
+			//"url" : 'http://www.dikachongwu.com/weChat/shopOrder/addOrUpdate',
+			"dataType" : "json",
+			"contentType":'application/json;charset=utf-8',  
+			"data" : JSON.stringify(params),
+			"success" : function(data) {
+					//debugger;
+					if(data.code == '200'){
+						console.log(data);
+						$('.page.cell').removeClass('slideIn');
+						$succ_toast.fadeIn(100);
+						setTimeout(function () {
+							$succ_toast.fadeOut(100);
+						}, 2000);
+						setTimeout(function () {
+							window.history.go(0);
+						}, 2000);
+
+					}else{
+						//.messager.error(data.message);
+					}
+				}
+			});			
+							
+		}
+		
+		function addOrder(){
+	
+			var $succ_toast = $('#succ_toast');
+			var $fail_toast = $('#fail_toast');
+			//debugger;
+			
+			//昵称
+			if(!$('#petId').val()){
+				$('#errorText').text('请选择宠物！');
+				$fail_toast.fadeIn(100);
+				setTimeout(function () {
+					$fail_toast.fadeOut(100);
+				}, 2000);
+				return;
+			}
+			
+			//服务项目
+			if(!$('#serviceClass').prev().val()){
+				$('#errorText').text('请选择服务项目！');
+				$fail_toast.fadeIn(100);
+				setTimeout(function () {
+					$fail_toast.fadeOut(100);
+				}, 2000);
+				return;
+			}
+			
+			//预约时间
+			if(!$('#appointedTime').val()){
+				$('#errorText').text('请选择预约时间！');
+				$fail_toast.fadeIn(100);
+				setTimeout(function () {
+					$fail_toast.fadeOut(100);
+				}, 2000);
+				return;
+			}
+			
+			//预约时间
+			if( $($('#serviceType').children("input[type=radio]:checked")[0]).length == 0){
+				$('#errorText').text('请选择接送方式！');
+				$fail_toast.fadeIn(100);
+				setTimeout(function () {
+					$fail_toast.fadeOut(100);
+				}, 2000);
+				return;
+			}
+			
+			//上门接送 $($('#serviceType').children("input[type=radio]:checked")[0]).val()
+			//是否打疫苗 $("#vaccines").get(0).checked
+			//备注  $('#remark').val()
+			var goodsInfo = {
+				"appointedTime": $('#appointedTime').val(),
+				"petId": $('#petId').val(),
+				"serviceId": $('#serviceClass').prev().val(),
+				"pickUp": $($('#serviceType').children("input[type=radio]:checked")[0]).val(),
+				"vaccines": $("#vaccines").get(0).checked
+			};
+			debugger;
+			var params = {			  
+			    "orderType": "10",	
+			    "userId": GetRequest().userId,
+			    "goodsInfo": JSON.stringify(goodsInfo ),
+			    "remark": $('#remark').val()
+			};
+			
+			$.ajax({
+			"type" : 'POST',
+			"url" : 'http://www.dikachongwu.com/weChat/shopOrder/addOrUpdate',
+			//"url" : 'http://www.dikachongwu.com/weChat/shopOrder/addOrUpdate',
+			"dataType" : "json",
+			"contentType":'application/json;charset=utf-8',  
+			"data" : JSON.stringify(params),
+			"success" : function(data) {
+					//debugger;
+					if(data.code == '200'){
+						console.log(data);
+						$('.page.cell').removeClass('slideIn');
+						$succ_toast.fadeIn(100);
+						setTimeout(function () {
+							$succ_toast.fadeOut(100);
+						}, 2000);
+						setTimeout(function () {
+							window.history.go(0);
+						}, 2000);
+
+					}else{
+						//.messager.error(data.message);
+					}
+				}
+			});			
+							
+		}
+		
+		//选择宠物
+		function choicePets(_this){
+		    var ele = _this;
+			$.ajax({
+				"type" : 'GET',
+				"url" : 'http://www.dikachongwu.com/weChat/userPet/queryList?userId=' + GetRequest().userId,
+				"dataType" : "json",
+				//"data" : params,
+				"success" : function(data) {
+					debugger;
+					console.log(data);	
+					if(data.code == '200'){
+						var userPets = [];						
+						for (var i = 0; i < data.data.length; i++) {
+							console.log(data.data[i]);	
+							var pet = {};
+							pet.value = data.data[i].petId;
+							pet.label = data.data[i].petName;	
+							userPets.push(pet);								
+						}	
+						weui.picker(userPets, {
+							onChange: function (result) {
+								console.log(result);
+							},
+							onConfirm: function (result) {
+								debugger;
+								//$('#petId').val(result[0].value);				
+								//$('#showPicker3').text(result[0].label);
+								$(ele).prev().val(result[0].value)
+								$(ele).text(result[0].label);
+								console.log(result);
+							},
+							title: '选择宠物'
+						});
+					}else{
+						//.messager.error(data.message);
+					}
+				}
+			});
+		}
+
+		//选择宠物
+		function servicePro(_this,type){
+		    var ele = _this;
+			$.ajax({
+				"type" : 'GET',
+				"url" : 'http://www.dikachongwu.com/weChat/serviceProject/queryList?type=' + type,
+				"dataType" : "json",
+				//"data" : params,
+				"success" : function(data) {
+					debugger;
+					console.log(data);	
+					if(data.code == '200'){
+						var userPets = [];						
+						for (var i = 0; i < data.data.length; i++) {
+							console.log(data.data[i]);	
+							var pet = {};
+							pet.value = data.data[i].serviceId;
+							pet.label = data.data[i].projectName;	
+							userPets.push(pet);								
+						}	
+						weui.picker(userPets, {
+							onChange: function (result) {
+								console.log(result);
+							},
+							onConfirm: function (result) {
+								debugger;
+								//$('#petId').val(result[0].value);				
+								//$('#showPicker3').text(result[0].label);
+								$(ele).prev().val(result[0].value)
+								$(ele).text(result[0].label);
+								console.log(result);
+							},
+							title: '选择宠物'
+						});
+					}else{
+						//.messager.error(data.message);
+					}
+				}
+			});
+		}
+
+
+        $(function () {
+            $("input[type='text']").keyup(function(){
+                debugger;
+                var parent = $(this).parent();
+                var inputcheckbox = $(parent).children().first();
+                $(inputcheckbox).prop("checked",true);
+            });
+            //初始项目
+            var winH = $(window).height();
+            var categorySpace = 10;
+
+            $('.js_item').on('click', function(){
+                var id = $(this).data('id');
+                window.pageManager.go(id);
+            });
+            $('.js_category').on('click', function(){
+                var $this = $(this),
+                        $inner = $this.next('.js_categoryInner'),
+                        $page = $this.parents('.page'),
+                        $parent = $(this).parent('li');
+                var innerH = $inner.data('height');
+
+                if(!innerH){
+                    $inner.css('height', 'auto');
+                    innerH = $inner.height();
+                    $inner.removeAttr('style');
+                    $inner.data('height', innerH);
+                }
+
+                if($parent.hasClass('js_show')){
+                    $parent.removeClass('js_show');
+                }else{
+                    $parent.siblings().removeClass('js_show');
+
+                    $parent.addClass('js_show');
+                    if(this.offsetTop + this.offsetHeight + innerH > $page.scrollTop() + winH){
+                        var scrollTop = this.offsetTop + this.offsetHeight + innerH - winH + categorySpace;
+
+                        if(scrollTop > this.offsetTop){
+                            scrollTop = this.offsetTop - categorySpace;
+                        }
+
+                        $page.scrollTop(scrollTop);
+                    }
+                }
+
+                var winH = $(window).height();
+                var $foot = $('body').find('.page__ft');
+                if($foot.length < 1) return;
+
+                if($foot.position().top + $foot.height() < winH){
+                    $foot.addClass('j_bottom');
+                }else{
+                    $foot.removeClass('j_bottom');
+                }
+            });
+
+            //菜单点击事件
+            $('.weui-tabbar__item').on('click', function () {
+            //debugger;
+                $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+
+				$('.c01').hide();
+				$('.c00').hide();
+                for(var i =0;i<=5 ;++i){
+                    $('.c'+ i +'').hide();
+                }
+                $('.'+ this.id +'').show();
+				if(this.id == 'c0'){
+					$('.c00').show();
+				}
+
+                //$('.'+ this.id +'').removeClass('weui-tab__content').siblings('.weui-tab__content').addClass('weui-tab__content');
+            });
+
+			//上级菜单
+             $('.weui-navbar__item').on('click', function () {
+				//debugger;
+                $(this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+				$(this).parent().children().each(function(){
+					$('.'+$(this)[0].id+'').hide();
+				 });		
+				$('.'+ $(this)[0].id +'').show();
+            });
+
+            //下拉框
+            $('#showPhone').on('click', function () {
+                weui.picker([{
+                    label: '+86',
+                    value: 0
+                }, {
+                    label: '+80',
+                    value: 1
+                }, {
+                    label: '+84',
+                    value: 2
+                }, {
+                    label: '+87',
+                    value: 3
+                }], {
+                    onChange: function (result) {
+                        console.log(result);
+                    },
+                    onConfirm: function (result) {
+                        console.log(result);
+                    },
+                    title: '单列选择器'
+                });
+            });
+												
+			
+			//寄养日期
+		   $('#showDatePicker1').on('click', function () {
+                //debugger;
+                weui.datePicker({
+					//format: "yyyy-mm-dd",//设置格式
+                    start: 1990,
+                    end: new Date().getFullYear(),
+                    onChange: function (result) {
+                        console.log(result);
+                    },
+                    onConfirm: function (result) {
+                        console.log(result);
+                        $('.ma_expect_date_picker .weui-picker').on('animationend webkitAnimationEnd', function() {
+                            show_foster_time_picker(this, result);
+                        });
+                    },
+                    title: '开始日期',
+                    id: 'ma_expect_date',
+                    className: 'ma_expect_date_picker'
+                });
+            });
+			
+			function show_foster_time_picker(_this, date){
+				weui.datePicker({
+                    start: 1990,
+                    end: new Date().getFullYear(),
+                    onChange: function (result) {
+                        console.log(result);
+                    },
+                    onConfirm: function (result) {
+						
+						//debugger;
+                        console.log(result);
+						//fosterTime
+						var startFosterTime ='',endFosterTime='';
+						startFosterTime += date[0].value + '-' ; 
+						startFosterTime += date[1].value > 10 ? date[1].value : '0' +date[1].value + '-' ;
+						startFosterTime += date[2].value > 10 ? date[2].value : '0' +date[2].value ;
+						
+						endFosterTime += result[0].value + '-' ;
+						endFosterTime += result[1].value > 10 ? result[1].value : '0' +result[1].value  + '-' ;
+						endFosterTime += result[2].value > 10 ? result[2].value : '0' +result[2].value ;
+							
+						$("#fosterTime").text(startFosterTime +' 至 '+ endFosterTime + ' ('+ DateDiff(startFosterTime,endFosterTime) +' 天)');
+
+						$("#startFosterTime").val(startFosterTime);
+						$("#endFosterTime").val(endFosterTime);
+						
+                    },
+                    title: '结束日期',
+                    id: 'ma_expect_date',
+                    className: 'ma_expect_date_picker'
+                });
+			}
+			
+			//计算两个时间天数
+			function DateDiff(sDate,eDate) {
+				//var sDate=$("input[name='startDate']").val(),
+				//eDate=$("input[name='endDate']").val(),
+				var iDays,sDate1,eDate1,startDate, endDate;
+				startDate = new Date(sDate).getTime();
+				//转换为dd-MM-yyyy格式并转换为毫秒
+				endDate = new Date(eDate).getTime();
+				iDays = parseInt(Math.abs(endDate - startDate) / 1000 / 60 / 60 / 24);
+				//把相差的毫秒数转换为天数
+				return iDays+1;  //返回相差天数
+			}
+			
+			//预约时间
+            $('#showDatePicker').on('click', function () {
+                //debugger;
+                weui.datePicker({
+                    start: 1990,
+                    end: new Date().getFullYear(),
+                    onChange: function (result) {
+                        console.log(result);
+                    },
+                    onConfirm: function (result) {
+                        console.log(result);
+                        $('.ma_expect_date_picker .weui-picker').on('animationend webkitAnimationEnd', function() {
+                            show_expect_time_picker(this, result);
+                        });
+                    },
+                    title: '多列选择器',
+                    id: 'ma_expect_date',
+                    className: 'ma_expect_date_picker'
+                });
+            });
+
+            // -----------------------二级调用：时间
+            var hours = [], minites = [],symbol = [{ label: ':', value: 0 }];
+            function show_expect_time_picker(_this, date) {
+
+				var startFosterTime ='';
+				startFosterTime += date[0].value + '-' ; 
+				startFosterTime += date[1].value > 10 ? date[1].value : '0' +date[1].value + '-' ;
+				startFosterTime += date[2].value > 10 ? date[2].value : '0' +date[2].value ;
+                if (!hours.length) {
+                    for (var i = 0; i < 24; i++) {
+                        var hours_item = {};
+                        hours_item.label = ('' + i).length === 1 ? '0' + i : '' + i;
+                        hours_item.value = i;
+                        hours.push(hours_item);
+                    }
+                }
+                if (!minites.length) {
+                    for (var j = 0; j < 60; j++) {
+                        var minites_item = {};
+                        minites_item.label = ('' + j).length === 1 ? '0' + j : '' + j;
+                        minites_item.value = j;
+                        minites.push(minites_item);
+                    }
+                }
+
+                weui.picker(hours, symbol, minites, {
+                    defaultValue: [new Date().getHours() + 1, 0, 0],
+                    onConfirm: function (result) {
+                        var time = result[0].label + ':' + result[2].label;
+                        var expect_date = startFosterTime + ' ' + time;
+                        //debugger;
+                        $("#appointedTime").text(expect_date);
+                        $("#appointedTime").val(expect_date);
+
+                    },
+                    id: 'ma_expect_time'
+                });
+            }
+        });
+
+
+</script>
+
+<script type="text/html" id="tpl_full">
+    <div class="page">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th style="max-width: 40%">
+                    筛选条件
+                </th>
+                <th class="text-center">洗澡</th>
+                <th class="text-center">剃毛</th>
+                <th class="text-center">美容</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="max-width: 40%">
+                    狗狗：<br>毛长：短毛<br><7.5kg                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="215905">40</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="215907">100</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="215909">120</a></th>
+            </tr>
+            <tr>
+                <td style="max-width: 40%">
+                    猫咪：<br>毛长：短毛<br>7个月以下猫咪                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="217314">60</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="217316">110</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="217318">0</a></th>
+            </tr>
+            <tr>
+                <td style="max-width: 40%">
+                    猫咪：<br>毛长：短毛<br>成年猫                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="217320">80</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="217322">130</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="217324">0</a></th>
+            </tr>
+            <tr>
+                <td style="max-width: 40%">
+                    狗狗：<br>毛长：短毛<br><7.5kg-15kg                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218191">60</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218193">110</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218195">140</a></th>
+            </tr>
+            <tr>
+                <td style="max-width: 40%">
+                    狗狗：<br>毛长：短毛<br>15kg-25kg                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218197">80</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218199">130</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218201">160</a></th>
+            </tr>
+            <tr>
+                <td style="max-width: 40%">
+                    狗狗：<br>毛长：短毛<br>25kg-30kg                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218209">100</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218211">160</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218213">0</a></th>
+            </tr>
+            <tr>
+                <td style="max-width: 40%">
+                    狗狗：<br>毛长：短毛<br>30kg-35kg                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218269">120</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218271">0</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218273">0</a></th>
+            </tr>
+            <tr>
+                <td style="max-width: 40%">
+                    狗狗：<br>35kg以上                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218275">140</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218277">0</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="218279">0</a></th>
+            </tr>
+            <tr>
+                <td style="max-width: 40%">
+                    狗狗：<br>身高：小型犬(26-40cm)<br>毛长：短毛                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="237389">45</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="237391">0</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="237393">0</a></th>
+            </tr>
+            <tr>
+                <td style="max-width: 40%">
+                    狗狗：<br>身高：小型犬(26-40cm)<br>毛长：短毛                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="244952">55</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="244954">0</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="244956">0</a></th>
+            </tr>
+            <tr>
+                <td style="max-width: 40%">
+                    狗狗：<br>毛长：短毛                                </td>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="256867">50</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="256869">0</a></th>
+                <th class="text-center"><a href="javascript:;" class="actionEditServiceItem" data-service="256871">0</a></th>
+            </tr>
+            </tbody>
+        </table>
+
+    <div class="table-responsive">
+        <table class="table table-striped" style="background: #fff">
+            <tbody>
+            <tr>
+                <td>单项价格</td>
+                <td>单项服务</td>
+            </tr>
+            <tr>
+                <td class="price_class">￥10</td>
+                <td>剪指甲</td>
+            </tr>
+            <tr>
+                <td class="price_class">￥10</td>
+                <td>修贵宾脚</td>
+            </tr>
+            <tr>
+                <td class="price_class">￥10</td>
+                <td>挤肛门腺</td>
+            </tr>
+            <tr>
+                <td class="price_class">￥10</td>
+                <td>洗耳</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <a href="javascript:;" class="btn btn-lg btn-info close-popup">关闭</a>
+    </div>
+    </div>
+
+</script>
+
+<script type="text/html" id="tpl_msg">
+        <div class="page">
+        <div class="page__hd">
+        <h1 class="page__title">Msg</h1>
+        <p class="page__desc">提示页</p>
+        </div>
+        <div class="page__bd page__bd_spacing">
+        <a href="#msg_success" class="weui-btn weui-btn_default">成功提示页</a>
+        <a href="#msg_warn" class="weui-btn weui-btn_default">失败提示页</a>
+        <a href="#msg_text" class="weui-btn weui-btn_default">无图标提示页</a>
+        <a href="#msg_text_primary" class="weui-btn weui-btn_default">无图标提示页</a>
+        </div>
+        </div>
+
+</script>
+<script type="text/html" id="tpl_msg_success">
+    <div class="page">
+        <div class="weui-msg">
+            <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+            <div class="weui-msg__text-area">
+                <h2 class="weui-msg__title">操作成功</h2>
+                <p class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:">文字链接</a></p>
+            </div>
+            <div class="weui-msg__opr-area">
+                <p class="weui-btn-area">
+                    <a href="javascript:history.back();" class="weui-btn weui-btn_primary">推荐操作</a>
+                </p>
+            </div>
+            <div class="weui-msg__tips-area">
+                <p class="weui-msg__tips">提示详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:">文字链接</a></p>
+            </div>
+            <div class="weui-msg__extra-area">
+                <div class="weui-footer">
+                    <p class="weui-footer__links">
+                        <a href="javascript:" class="weui-footer__link">底部链接文本</a>
+                    </p>
+                    <p class="weui-footer__text">Copyright &copy; 2008-2016 weui.io</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</script>
+<script type="text/html" id="tpl_msg_warn">
+    <div class="page">
+        <div class="weui-msg">
+            <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+            <div class="weui-msg__text-area">
+                <h2 class="weui-msg__title">操作失败</h2>
+                <p class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:">文字链接</a></p>
+            </div>
+            <div class="weui-msg__tips-area">
+                <p class="weui-msg__tips">提示详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:">文字链接</a></p>
+            </div>
+            <div class="weui-msg__opr-area">
+                <p class="weui-btn-area">
+                    <a href="javascript:history.back();" class="weui-btn weui-btn_default">辅助操作</a>
+                </p>
+            </div>
+            <div class="weui-msg__extra-area">
+                <div class="weui-footer">
+                    <p class="weui-footer__links">
+                        <a href="javascript:" class="weui-footer__link">底部链接文本</a>
+                    </p>
+                    <p class="weui-footer__text">Copyright &copy; 2008-2016 weui.io</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</script>
+<script type="text/html" id="tpl_msg_text">
+    <div class="page">
+        <div class="weui-msg">
+            <div class="weui-msg__text-area">
+                <h2 class="weui-msg__title">操作成功</h2>
+                <p class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:">文字链接</a></p>
+            </div>
+            <div class="weui-msg__opr-area">
+                <p class="weui-btn-area">
+                    <a href="javascript:history.back();" class="weui-btn weui-btn_primary">推荐操作</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</script>
+<script type="text/html" id="tpl_msg_text_primary">
+    <div class="page">
+        <div class="weui-msg">
+            <div class="weui-msg__text-area">
+                <p class="weui-msg__desc">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:">文字链接</a></p>
+                <p class="weui-msg__desc-primary">内容详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现</p>
+            </div>
+            <div class="weui-msg__opr-area">
+                <p class="weui-btn-area">
+                    <a href="javascript:history.back();" class="weui-btn weui-btn_primary">推荐操作</a>
+                </p>
+            </div>
+            <div class="weui-msg__tips-area">
+                <p class="weui-msg__tips">提示详情，可根据实际需要安排，如果换行则不超过规定长度，居中展现<a href="javascript:">文字链接</a></p>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<script type="text/html" id="tpl_form_page">
+    <div class="page">
+        <div class="weui-form">
+            <div class="weui-form__text-area">
+				
+				<div class="weui-form__desc">
+					<img src="https://www.bagong.cn/jic/i/noavatar.png" id="pet_avatar" class="img-circle" >
+				</div>
+            </div>
+            <div class="weui-form__control-area">
+				
+                <div class="weui-cells__group weui-cells__group_form">
+                    <div class="weui-cells__title"></div>
+                    <div class="weui-cells weui-cells_form">
+						<div class="weui-cell weui-cell_active">
+                            
+                            <div class="weui-cell__bd weui-cells_checkbox" id = 'petTypeId' >
+								<input type="checkbox" class="weui-check" checked="checked"/>								
+								<span class="weui-icon-checked" onclick="checkbox1(this)" ></span>
+								猫
+
+								<input type="checkbox" class="weui-check"/>			
+								<span class="weui-icon-checked" onclick="checkbox1(this)"></span>
+								狗
+								
+								<input type="checkbox" class="weui-check"/>			
+								<span class="weui-icon-checked" onclick="checkbox1(this)"></span>
+								其他
+							</div>
+						</div>
+						
+											
+						<div class="weui-cell weui-cell_active">
+                            
+                            <div class="weui-cell__bd weui-cells_checkbox" id = 'sex' >
+								<input type="checkbox" class="weui-check" checked="checked" value = '1'/>								
+								<span class="weui-icon-checked" onclick="checkbox1(this)" ></span>
+								公
+
+								<input type="checkbox" class="weui-check" value = '0' />			
+								<span class="weui-icon-checked" onclick="checkbox1(this)"></span>
+								母
+							</div>
+                        </div>
+						
+						<!--<div class="weui-cell weui-cell_active">                           
+							<div class="weui-cell__bd weui-cells_checkbox" id = 'vaccines' >
+								<input type="checkbox" class="weui-check" checked="checked" value = '1'/>								
+								<span class="weui-icon-checked" onclick="checkbox1(this)" ></span>
+								已打疫苗
+
+								<input type="checkbox" class="weui-check" value = '0' />			
+								<span class="weui-icon-checked" onclick="checkbox1(this)"></span>
+								未打疫苗
+							</div>
+						</div>-->
+						
+						<div class="weui-cell weui-cell_active">                           
+							<div class="weui-cell__bd weui-cells_checkbox" id = 'sterilization' >
+								<input type="checkbox" class="weui-check" checked="checked" value = '1'/>								
+								<span class="weui-icon-checked" onclick="checkbox1(this)" ></span>
+								已做绝育
+
+								<input type="checkbox" class="weui-check" value = '0' />			
+								<span class="weui-icon-checked" onclick="checkbox1(this)"></span>
+								未做绝育
+							</div>
+						</div>
+						
+						<div class="weui-cell weui-cell_active"   >
+                           
+                            <div class="weui-cell__bd weui-cells_checkbox"  id = 'petInfo' >
+                                <input type="radio" name="radio1" class="weui-check weui-cells_radio" id="x15" checked="checked" />
+								<span class="weui-icon-checked" onclick="radioBox('x12')" ></span>
+								迷你(25cm以内) 
+								<input type="radio" name="radio2" class="weui-check weui-cells_radio iradio_square-orange" id="x16" />
+								<span class="weui-icon-checked" onclick="radioBox('x13')"></span>
+								小型犬(26-40cm)  
+								</br>								
+								<input type="radio" name="radio2" class="weui-check weui-cells_radio iradio_square-orange" id="x16" />
+								<span class="weui-icon-checked" onclick="radioBox('x13')"></span>
+								中型犬(41-60cm)                                
+								<input type="radio" name="radio2" class="weui-check weui-cells_radio iradio_square-orange" id="x16" />
+								<span class="weui-icon-checked" onclick="radioBox('x13')"></span>
+								大型犬(61-70cm)     
+								</br>								
+								<input type="radio" name="radio2" class="weui-check weui-cells_radio iradio_square-orange" id="x16" />
+								<span class="weui-icon-checked" onclick="radioBox('x13')"></span>
+								超大型犬(70cm+)                                
+                            </div>
+                        </div>
+						
+                        <div class="weui-cell weui-cell_active">
+                            <div class="weui-cell__hd"><label class="weui-label">昵称</label></div>
+                            <div class="weui-cell__bd">
+                                <input id="petName" class="weui-input" placeholder="填写宠物昵称"/>
+                            </div>
+                        </div>
+                        <div class="weui-cell weui-cell_active weui-cell_access"  id="showPicker1">
+                           
+							<div class="weui-cell__hd"><label class="weui-label">生日</label></div>
+							<input id="petBirthday" class="weui-input"  placeholder="请选择" />
+							<div class="weui-cell__bd weui-cell__ft" >
+							   请选择
+							</div>
+							
+                        </div>
+						
+						<div class="weui-cell weui-cell_active weui-cell_access"  id="showPicker2">
+                           
+							<div class="weui-cell__hd"><label class="weui-label">品种</label></div>
+							
+							<input id="varietiesText" class="weui-input"   placeholder="请选择" />
+							<input id="varieties" class="weui-input"  type = "hidden"  />
+							<div class="weui-cell__bd weui-cell__ft" >
+							   请选择
+							</div>
+							
+                        </div>
+
+						
+                        <div class="weui-cell weui-cell_active">
+                            <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
+                            <div class="weui-cell__bd">
+								<input id="mobile" class="weui-input" autofocus type="text" pattern="[0-9]*" placeholder="填写绑定的电话号码" maxlength="11" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-form__opr-area">
+                <a class="weui-btn weui-btn_primary" onclick ="addPet()">保存</a>
+            </div>
+
+        </div>
+        <div id="succ_toast2" style="display: none;">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+                <p class="weui-toast__content">已完成</p>
+            </div>
+        </div>
+		
+		<div id="fail_toast2" style="display: none;">
+            <div class="weui-mask_transparent"></div>
+            <div class="weui-toast">
+                <i class="weui-icon-warn weui-icon_toast"></i>
+                <p class="weui-toast__content" id = 'errorText2'>请填写完内容</p>
+            </div>
+        </div>
+		
+    </div>
+    <script type="text/javascript">
+	//window.history.go(-1);
+	//window.history.go(0);
+			//复选框点击效果
+	function checkbox1(_this) {
+		debugger;
+		//移除复选
+		$(_this).siblings('.weui-check').prop("checked",false);
+		$(_this).prev().prop("checked",true);
+		
+		//顶级复选框
+		if($(_this).parent()[0].id == "petTypeId"){
+			
+			$.ajax({
+				"type" : 'GET',
+				"url" : 'http://www.dikachongwu.com/weChat/petsClass/queryList?pageNum=1&pageSize=10&parentId=' + $(_this).prev().val(),
+				"dataType" : "json",
+				//"data" : params,
+				"success" : function(data) {
+					debugger;
+					if(data.code == '200'){
+						console.log(data);
+
+						var div2Html = '';
+						
+						for (var i = 0; i < data.data.length; i++) {
+							console.log(data.data[i]);							
+							if(div2Html == ''){
+								div2Html += '<input type="checkbox" class="weui-check"  checked="checked" value = '+ data.data[i].classId +' />';
+							}else{
+								div2Html += '<input type="checkbox" class="weui-check"  value = '+ data.data[i].classId +' />';
+							}
+							
+							div2Html += '<span class="weui-icon-checked" onclick="checkbox1(this)" ></span>' + data.data[i].className;									
+						}
+						if(div2Html == ''){							
+							$("#petInfo").parent().hide();
+						}else{
+							$("#petInfo").html(div2Html);
+							$("#petInfo").parent().show();
+						}
+						$('#varieties').val("");
+						$('#varietiesText').val("请选择");
+						
+					}else{
+						//.messager.error(data.message);
+					}
+				}
+			});
+			
+		}
+	}
+
+	function addPet(){
+	
+		var $succ_toast = $('#succ_toast2');
+		var $fail_toast = $('#fail_toast2');
+		//debugger;
+		//宠物类型
+		if($('#petTypeId').children("input[type=checkbox]:checked").length == 0){
+			$('#errorText2').text('请选择宠物类型！');
+			$fail_toast.fadeIn(100);
+			setTimeout(function () {
+				$fail_toast.fadeOut(100);
+			}, 2000);
+			return;
+		}
+		
+		//性别
+		if($('#sex').children("input[type=checkbox]:checked").length == 0){
+			$('#errorText2').text('请选择宠物性别！');
+			$fail_toast.fadeIn(100);
+			setTimeout(function () {
+				$fail_toast.fadeOut(100);
+			}, 2000);
+			return;
+		}
+		
+
+		
+		//绝育
+		if($('#sterilization').children("input[type=checkbox]:checked").length == 0){
+			$('#errorText2').text('请勾选宠物绝育信息！');
+			$fail_toast.fadeIn(100);
+			setTimeout(function () {
+				$fail_toast.fadeOut(100);
+			}, 2000);
+			return;
+		}
+		
+		//昵称
+		if(!$('#petName').val()){
+			$('#errorText2').text('请填写宠物昵称！');
+			$fail_toast.fadeIn(100);
+			setTimeout(function () {
+				$fail_toast.fadeOut(100);
+			}, 2000);
+			return;
+		}
+		
+		//生日
+		if(!$('#petBirthday').val()){
+			$('#errorText2').text('请选择宠物生日！');
+			$fail_toast.fadeIn(100);
+			setTimeout(function () {
+				$fail_toast.fadeOut(100);
+			}, 2000);
+			return;
+		}
+		
+		//品种
+		if(!$('#varieties').val()){
+			$('#errorText2').text('请选择宠物品种！');
+			$fail_toast.fadeIn(100);
+			setTimeout(function () {
+				$fail_toast.fadeOut(100);
+			}, 2000);
+			return;
+		}
+		
+		//联系方式
+		if(!$('#mobile').val()){
+			$('#errorText2').text('请填写联系方式！');
+			$fail_toast.fadeIn(100);
+			setTimeout(function () {
+				$fail_toast.fadeOut(100);
+			}, 2000);
+			return;
+		}
+		var params = {			  
+		  "mobile": $('#mobile').val(),
+		  "petBirthday": $('#petBirthday').val(),
+		  "userId": GetRequest().userId,
+		  "petInfo": $('#petInfo').children("input[type=checkbox]:checked").val(),
+		  "petName": $('#petName').val(),
+		  "petTypeId": $('#petTypeId').children("input[type=checkbox]:checked").val(),
+		  "sex": parseInt($('#sex').children("input[type=checkbox]:checked").val()),
+		  "sterilization": parseInt($('#sterilization').children("input[type=checkbox]:checked").val()),
+
+		  "varieties": $('#varieties').val()
+		};
+		
+		$.ajax({
+		"type" : 'POST',
+		"url" : 'http://www.dikachongwu.com/weChat/userPet/addOrUpdate',
+		"dataType" : "json",
+		"contentType":'application/json;charset=utf-8',  
+		"data" : JSON.stringify(params),
+		"success" : function(data) {
+				//debugger;
+				if(data.code == '200'){
+					console.log(data);
+					$('.page.cell').removeClass('slideIn');
+					$succ_toast.fadeIn(100);
+					setTimeout(function () {
+						$succ_toast.fadeOut(100);
+					}, 2000);
+					setTimeout(function () {
+						window.history.go(-1);
+					}, 2000);
+
+				}else{
+					//.messager.error(data.message);
+				}
+			}
+		});								
+	}
+	
+	$(function(){
+		
+		$.ajax({
+			"type" : 'GET',
+			"url" : 'http://www.dikachongwu.com/weChat/petsClass/queryList?pageNum=1&pageSize=10&parentId=',
+			"dataType" : "json",
+			//"data" : params,
+			"success" : function(data) {
+				//debugger;
+				if(data.code == '200'){
+					console.log(data);
+					var div1Html = '';
+									
+					for (var i = 0; i < data.data.length; i++) {
+                        console.log(data.data[i]);
+						if(data.data[i].parentId == '0'){
+							
+							div1Html += '<input type="checkbox" class="weui-check"  value = '+ data.data[i].classId +' />';
+									
+							div1Html += '<span class="weui-icon-checked" onclick="checkbox1(this)" ></span>' + data.data[i].className;
+						}		
+                    }
+					$("#petTypeId").html(div1Html);
+					$("#petInfo").parent().hide();
+				}else{
+					//.messager.error(data.message);
+				}
+			}
+		});
+			
+		//下拉框点击时间
+		$('#showPicker1').on('click', function () {
+			debugger;
+			weui.datePicker({
+				start: 1990,
+				end: new Date().getFullYear(),
+				onChange: function (result) {
+					console.log(result);
+				},
+				onConfirm: function (date) {
+					console.log(date);
+					var startFosterTime ='';
+					startFosterTime += date[0].value + '-' ; 
+					startFosterTime += (date[1].value > 10 ? date[1].value : ('0' +date[1].value + '-') );
+					startFosterTime += date[2].value > 10 ? date[2].value : '0' +date[2].value ;
+					$('#petBirthday').val(startFosterTime);
+				},
+				title: '生日',
+				id: 'ma_expect_date',
+				className: 'ma_expect_date_picker'
+			});
+		});
+		
+		//下拉框点击时间
+		$('#showPicker2').on('click', function () {
+			debugger;
+			$.ajax({
+				"type" : 'GET',
+				"url" : 'http://www.dikachongwu.com/weChat/varieties/queryList?classId=' + $('#petTypeId').children("input[type=checkbox]:checked").val(),
+				"dataType" : "json",
+				//"data" : params,
+				"success" : function(data) {
+					debugger;
+					console.log(data);	
+					if(data.code == '200'){
+						var userPets = [];						
+						for (var i = 0; i < data.data.length; i++) {
+							console.log(data.data[i]);	
+							var pet = {};
+							pet.value = data.data[i].varietiesId;
+							pet.label = data.data[i].varietiesName;	
+							userPets.push(pet);								
+						}	
+						weui.picker(userPets, {
+							onChange: function (result) {
+								console.log(result);
+							},
+							onConfirm: function (result) {
+								//debugger;
+								console.log(result);
+								$('#varieties').val(result[0].value);
+								$('#varietiesText').val(result[0].label);
+								
+							},
+							title: '品种'
+						});
+					}else{
+						//.messager.error(data.message);
+					}
+				}
+			});
+			
+			
+		});
+	});
+</script>
+
+
+<script type="text/template" id="footerTmpl">
+    <!--<div class="page__ft"><a href="javascript:home()"><img src="images/icon_footer_link.png"/></a></div>-->
+</script>
+<script src="./zepto.min.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="https://res.wx.qq.com/open/libs/weuijs/1.2.1/weui.min.js"></script>
+<script src="./example.js"></script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+ <!--/_footer 作为公共模版分离出去-->
+<script src="static/comons/js/commonCs.js"></script>
+<link rel="stylesheet" href="lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>产品分类</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 产品管理 <span class="c-gray en">&gt;</span> 产品分类 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<table class="table">
+	<tr>	
+		<td width="200" class="va-t">
+		<a href="javascript:;" onclick="showAdd()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a>
+		<ul id="treeDemo" class="ztree"></ul></td>
+		<td class="va-t">
+			<form action="" method="post" class="form form-horizontal" id="form" style="display: block;">
+				
+				
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2"> <span class="c-red">*</span>父级分类：</label>
+					<div class="formControls col-xs-6 col-sm-6">
+							<span class="select-box">
+								<select class="select" id="parentId" name="parentId">
+									<option value="0">顶级分类</option>
+									<option value="10">分类一级</option>
+									<option value="101">&nbsp;&nbsp;├ 分类二级</option>
+									<option value="102">&nbsp;&nbsp;├ 分类二级</option>
+									<option value="20">分类一级</option>
+									<option value="200">&nbsp;&nbsp;├ 分类二级</option>
+								</select>
+							</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2">
+						<span class="c-red">*</span>
+						分类名称：</label>
+					<div class="formControls col-xs-6 col-sm-6">
+						<input type="hidden" class="input-text" value="" placeholder="" id="classId" name="classId">
+						
+						<input type="text" class="input-text" value="" placeholder="" id="className" name="className">
+					</div>
+				</div>
+				
+				<div class="row cl">
+					<div class="col-9 col-offset-2">
+						<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+					</div>
+				</div>
+			</form>
+			<!--<iframe ID="testIframe" Name="testIframe" FRAMEBORDER=0 SCROLLING=AUTO width=100%  height=390px SRC="product-category-add.html"></iframe> -->
+		</td>
+	</tr>
+</table>
+<!--_footer 作为公共模版分离出去-->
+<script src="static/comons/js/commonJs.js"></script>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/zTree/v3/js/jquery.ztree.all-3.5.min.js"></script> 
+<script type="text/javascript">
+
+var zTree;
+var setting = {
+    edit: {
+        enable: true,
+		showRenameBtn: false,
+        selectedMulti: false,
+    },
+    view: {
+        dblClickExpand: false,
+        showLine: false,
+        selectedMulti: false
+    },
+    data: {
+        key: {
+            name: "className",
+        },
+        simpleData: {
+            enable: true,
+            idKey: "classId",
+            pIdKey: "parentId",
+            rootPId: "0"
+        }
+    },
+
+
+    callback: {
+		beforeRemove: zTreeBeforeRemove,
+		beforeClick: function(treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("tree");
+				$('#classId').val(treeNode.classId);
+				$('#parentId').val(treeNode.parentId);
+				$('#className').val(treeNode.className);
+				return true;
+			//}
+		}
+    }
+}
+
+
+function initZtree() {
+	var t = $("#treeDemo");
+	t = $.fn.zTree.init(t, setting, zNodes);
+}
+
+var zNodes = [];
+
+queryClass(0);
+function queryClass(parentId){
+	$.ajax({
+		type: 'GET',
+		url: "http://www.dikachongwu.com/weChat/petsClass/queryList",
+		dataType: 'json',
+		success: function(data){
+			if(data.code == '200'){
+				//debugger;	
+				zNodes = [];
+				var checkValue = $("#parentId").val();
+				$("#parentId").empty();	
+				$("#parentId").append("<option value='0'>顶级分类</option>");
+				data.data.forEach(function(e) {
+					if('0' == e.parentId){
+						//$("#parentId").append("<option value=" + e.classId +" "+ e.classId == checkValue?selected:null +">"+ e.className +"</option>");
+						$("#parentId").append("<option value=" + e.classId +">"+ e.className +"</option>");
+					}
+					$("#parentId").val(checkValue);
+					
+					zNodes.push(e);
+					//console.log(e);
+				});	
+				//console.log(zNodes);
+				initZtree();
+			}else{
+				layer.msg(data.message,{icon:1,time:1000});
+			}
+
+		},
+		error:function(data) {
+			console.log(data.msg);
+		},
+	});
+}
+
+function zTreeBeforeRemove(treeId, treeNode) {
+	del(null,"http://www.dikachongwu.com/weChat/petsClass/deleteEntityById/",treeNode.classId);
+	setTimeout(function(){
+		queryClass(0);
+	},1000);
+	return false;
+}
+function showAdd(){
+	$("#form-class-add").css('display','block');
+	$('#classId').val(null);
+	$('#parentId').val(null);
+	$('#className').val(null);
+}
+
+$("#form").validate({
+	rules:{
+		parentId:{
+			required:true,
+			//minlength:2,
+			//maxlength:16
+		},
+		className:{
+			required:true,
+		},
+							
+	},
+	onkeyup:false,
+	focusCleanup:true,
+	success:"valid",
+	submitHandler:function(form){
+
+	var params = JSON.stringify($('#form').serializeJSON());
+	var url = "http://www.dikachongwu.com/weChat/petsClass/addOrUpdate";
+
+	save(url,params);
+	setTimeout(function(){
+		queryClass(0);
+	},1000);
+	
+	//parent.layer.closeAll();
+	//parent.$('.btn-refresh').click();
+	//parent.layer.close(index);
+	}
+});
+
+</script>
+<script type="text/javascript" src="static/comons/js/common.js"></script>
+</body>
+</html>

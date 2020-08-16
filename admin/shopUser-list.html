@@ -1,0 +1,108 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+ <!--/_footer 作为公共模版分离出去-->
+<script src="static/comons/js/commonCs.js"></script>
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>数据字典</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+	用户中心
+	<span class="c-gray en">&gt;</span>
+	用户管理
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<form id="queryform">
+		<div class="text-c">
+			<input type="text" class="input-text" style="width:250px" placeholder="输入昵称" id="nickName" name="nickName">
+			<button type="button" onclick="doQuery();return false;" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜</button>
+			<button type="reset" class="btn btn-primary"> 重置</button>
+		</div>
+	</form>
+
+	<div class="mt-20">
+		<table id = "table1" class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+				<tr class="text-c">
+					
+					<th width = "190">ID</th>
+					<th width = "60">头像</th>
+					<th>昵称</th>
+					<th >积分</th>
+					<th >联系方式</th>
+					<th >国家</th>
+					<th >省份</th>
+					<th >城市</th>
+					<th width = "160">创建时间</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-c">
+				
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script src="static/comons/js/commonJs.js"></script>
+
+<script type="text/javascript">
+sAjaxSource = "http://www.dikachongwu.com/weChat/shopUser/queryPage";
+
+//查询条件
+//var params = {
+//			dictCode : $('#dictCode').val(),
+//			dictValue : $('#dictValue').val()
+//		};
+
+//字段
+var aoColumns = [
+	
+	{"mData" : "userId",'sClass' : 'center'},
+	{"mData" : "headimgurl",'sClass' : 'center'},	
+	{"mData" : "nickName",'sClass' : 'center'},	
+	{"mData" : "integral",'sClass' : 'center'},	
+	{"mData" : "mobile",'sClass' : 'center'},				
+	{"mData" : "country",'sClass' : 'center'},				
+	{"mData" : "province",'sClass' : 'center'},		
+	{"mData" : "city",'sClass' : 'center'},			
+	{"mData" : "createTime",'sClass' : 'center'}
+];
+
+//处理表格
+var fnRowCallback =  function( nRow, aData, iDisplayIndex ) {
+	//操作行 3为减去隐藏td后的列
+	/* Append the grade to the default row class name */
+	var html = '';
+	//if(aData.userStatus=='1'){
+	//	html = app.addButton.stop('admin_stop',aData.userId);
+	//}else{
+	//	html = app.addButton.start('admin_start',aData.userId);
+	//}
+	$(' td:eq(1)',nRow).html('<a href="javascript:;"><img width="60" class="product-thumb" src="'+aData.headimgurl +'"></a>');
+	
+	//$(' td:eq(6)',nRow).html(html+app.addButton.update('admin_edit',aData.userId,'500','400')+app.addButton.changePassword('admin_password',aData.userId,'500','400')+app.addButton.del('admin_del',aData.userId)+app.addButton.group('admin_group',aData.userId,'500','200'));
+	//$(' td:eq(5)',nRow).html(html+app.addButton.update('edit','system-data-edit.html',aData.dictId,'800','400')+app.addButton.del('del','http://www.dikachongwu.com/weChat/shopUser/deleteEntityById/',aData.dictId));
+	return nRow;
+};
+</script>
+<script type="text/javascript" src="static/comons/js/common.js"></script>
+</body>
+</html>

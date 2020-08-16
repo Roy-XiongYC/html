@@ -1,0 +1,121 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5shiv.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+ <!--/_footer 作为公共模版分离出去-->
+<script src="static/comons/js/commonCs.js"></script>
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>数据字典</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页
+	<span class="c-gray en">&gt;</span>
+	服务管理
+	<span class="c-gray en">&gt;</span>
+	项目列表
+	<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="page-container">
+	<form id="queryform">
+		<div class="text-c">
+			<input type="text" class="input-text" style="width:250px" placeholder="输入项目名" id="projectName" name="projectName">
+			<button type="button" onclick="doQuery();return false;" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+			<button type="reset" class="btn btn-primary"> 重置</button>
+		</div>
+	</form>
+
+
+
+	<div class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+
+		<a href="javascript:;" onclick="edit('编辑','service-data-edit.html',null,'800','400')"" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 添加服务项目</a>
+		</span>
+
+	</div>
+	<div class="mt-20">
+		<table id = "table1" class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+				<tr class="text-c">
+					
+					<th >ID</th>
+					<th>启用状态</th>
+					<th >服务类型</th>
+					<th >服务项目</th>
+					<th >价格</th>					
+					<th >创建时间</th>
+					<th >操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="text-c">
+					
+					
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script src="static/comons/js/commonJs.js"></script>
+
+<script type="text/javascript">
+sAjaxSource = "http://www.dikachongwu.com/weChat/serviceProject/queryPage";
+
+//查询条件
+//var params = {
+//			dictCode : $('#dictCode').val(),
+//			dictValue : $('#dictValue').val()
+//		};
+
+//字段
+var aoColumns = [
+	
+	{"mData" : "serviceId",'sClass' : 'center'},
+	{"mData" : "delStatus",'sClass' : 'center'},			
+	{"mData" : "type",'sClass' : 'center'},				
+	{"mData" : "projectName",'sClass' : 'center'},				
+	{"mData" : "price",'sClass' : 'center'},		
+	{"mData" : "createTime",'sClass' : 'center'},		
+	{"mData" : "createTime",'sClass' : 'center'}
+];
+
+//处理表格
+var fnRowCallback =  function( nRow, aData, iDisplayIndex ) {
+	//操作行 3为减去隐藏td后的列
+	/* Append the grade to the default row class name */
+	var html = '';
+	if(aData.delStatus=='1'){
+		$(' td:eq(1)',nRow).html('停用');
+		html = app.addButton.updateStatus('确认要更新启用状态吗？','&#xe615;','updateStatus','http://www.dikachongwu.com/weChat/serviceProject/updateStatus/',aData.serviceId,0);
+	}else{
+		$(' td:eq(1)',nRow).html('启用');
+		html = app.addButton.updateStatus('确认要更新停用状态吗？','&#xe631;','updateStatus','http://www.dikachongwu.com/weChat/serviceProject/updateStatus/',aData.serviceId,1);
+	}
+	
+	//	 10 美容洗澡 20 寄养
+	if(aData.type=='10'){
+		$(' td:eq(2)',nRow).html('美容洗澡');
+	}else{
+		$(' td:eq(2)',nRow).html('寄养');	
+	}
+	
+	//$(' td:eq(6)',nRow).html(html+app.addButton.update('admin_edit',aData.userId,'500','400')+app.addButton.changePassword('admin_password',aData.userId,'500','400')+app.addButton.del('admin_del',aData.userId)+app.addButton.group('admin_group',aData.userId,'500','200'));
+	$(' td:eq(6)',nRow).html(html+app.addButton.update('edit','service-data-edit.html',aData.serviceId,'800','400')+app.addButton.del('del','http://www.dikachongwu.com/weChat/serviceProject/deleteEntityById/',aData.serviceId));
+	return nRow;
+};
+</script>
+<script type="text/javascript" src="static/comons/js/common.js"></script>
+</body>
+</html>

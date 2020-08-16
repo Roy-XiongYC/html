@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.person.web.repository.BlogLinkMapper">
+<resultMap id="BaseResultMap"  type="com.person.web.blog.model.BlogLink" >
+	<result column="id" property="id" jdbcType="VARCHAR" />
+	<result column="user_id" property="userId" jdbcType="VARCHAR" />
+	<result column="user_name" property="userName" jdbcType="VARCHAR" />
+	<result column="link_name" property="linkName" jdbcType="VARCHAR" />
+	<result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+	<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+</resultMap> 
+<sql id="Criteria_Where_Clause"> 
+	<where> 
+		<if test="params.id!=null">
+			 and id=#{params.id}
+		</if>
+		<if test="params.userId!=null">
+			 and user_id=#{params.userId}
+		</if>
+		<if test="params.linkName!=null">
+			 and link_name=#{params.linkName}
+		</if>
+		<if test="params.linkUrl!=null">
+			 and link_url=#{params.linkUrl}
+		</if>
+		<if test="params.createTime!=null">
+			 and create_time=#{params.createTime}
+		</if>
+		<if test="params.userName_like!=null">
+			 and user_id in (select user_id from t_blog_user where user_name like
+			 CONCAT('%',#{params.userName_like},'%'))
+		</if>
+	</where> 
+</sql> 
+<sql id="Base_Column_List">
+  id,user_id,link_name,link_url,create_time
+</sql> 
+<select id="queryPage" resultMap="BaseResultMap" parameterType="com.person.framework.mybatis.Criteria"> 
+	select 
+	<include refid="Base_Column_List" />,(select user_name from t_blog_user where t_blog_link.user_id = t_blog_user.user_id ) as user_name
+	from t_blog_link
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+	<if test="orderBy!=null"> 
+		order by ${orderBy} 
+	</if> 
+</select> 
+<select id="queryPageCount" resultType="java.lang.Integer" parameterType="com.person.framework.mybatis.Criteria"> 
+	select count(1) from t_blog_link 
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+</select>
+<select id="queryPageLimitFive" resultMap="BaseResultMap" parameterType="java.lang.String"> 
+	select 
+	<include refid="Base_Column_List" />
+	from t_blog_link where user_id = #{userId} order by create_time desc limit 0,5
+</select>  
+<select id="queryEntity" resultMap="BaseResultMap" parameterType="java.lang.String">
+	select 
+	<include refid="Base_Column_List" />
+	from t_blog_link	where id = #{id}
+</select>
+<insert id="insert" parameterType="com.person.web.blog.model.BlogLink"> 
+	insert into t_blog_link
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="id != null"> 
+			id,
+		</if>
+		<if test="userId != null"> 
+			user_id,
+		</if>
+		<if test="linkName != null"> 
+			link_name,
+		</if>
+		<if test="linkUrl != null"> 
+			link_url,
+		</if>
+		<if test="createTime != null"> 
+			create_time,
+		</if>
+	</trim>
+	values
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="id != null"> 
+		#{id},
+	</if>
+	<if test="userId != null"> 
+		#{userId},
+	</if>
+	<if test="linkName != null"> 
+		#{linkName},
+	</if>
+	<if test="linkUrl != null"> 
+		#{linkUrl},
+	</if>
+	<if test="createTime != null"> 
+		#{createTime},
+	</if>
+	</trim>
+</insert>
+<update id="updateByCriteria" parameterType="com.person.framework.mybatis.Criteria">
+	update t_blog_link
+	<set>
+	<if test="record.id != null"> 
+		id = #{record.id},
+	</if>
+	<if test="record.userId != null"> 
+		user_id = #{record.userId},
+	</if>
+	<if test="record.linkName != null"> 
+		link_name = #{record.linkName},
+	</if>
+	<if test="record.linkUrl != null"> 
+		link_url = #{record.linkUrl},
+	</if>
+	<if test="record.createTime != null"> 
+		create_time = #{record.createTime},
+	</if>
+	</set>
+	<if test="params != null">
+		<include refid="Criteria_Where_Clause" />
+	</if>
+</update>
+<delete id="deleteByCriteria" parameterType="com.person.framework.mybatis.Criteria">
+	delete from t_blog_link
+	<if test="params != null">
+		<include refid="Criteria_Where_Clause" />
+	</if>
+</delete>
+<delete id="deleteById" parameterType="java.lang.String">
+	delete from t_blog_link
+	where id = #{id}
+</delete>
+</mapper>

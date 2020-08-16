@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.person.web.admin.repository.SysDictMapper">
+<resultMap id="BaseResultMap"  type="com.person.web.admin.model.SysDict" >
+	<result column="id" property="id" jdbcType="VARCHAR" />
+	<result column="dict_code" property="dictCode" jdbcType="VARCHAR" />
+	<result column="dict_value" property="dictValue" jdbcType="VARCHAR" />
+	<result column="dict_remark" property="dictRemark" jdbcType="VARCHAR" />
+</resultMap> 
+<sql id="Criteria_Where_Clause"> 
+	<where> 
+		<if test="params.id!=null">
+			 and id=#{params.id}
+		</if>
+		<if test="params.dictCode!=null">
+			 and dict_code=#{params.dictCode}
+		</if>
+		<if test="params.dictValue!=null">
+			 and dict_value=#{params.dictValue}
+		</if>
+		<if test="params.dictRemark!=null">
+			 and dict_remark=#{params.dictRemark}
+		</if>
+	</where> 
+</sql> 
+<sql id="Base_Column_List">
+  id,dict_code,dict_value,dict_remark
+</sql> 
+<select id="queryPage" resultMap="BaseResultMap" parameterType="com.person.framework.mybatis.Criteria"> 
+	select 
+	<include refid="Base_Column_List" />
+	from t_sys_dict
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+	<if test="orderBy!=null"> 
+		order by ${orderBy} 
+	</if> 
+</select> 
+<select id="queryPageCount" resultType="java.lang.Integer" parameterType="com.person.framework.mybatis.Criteria"> 
+	select count(1) from t_sys_dict 
+	<if test="params != null"> 
+		<include refid="Criteria_Where_Clause" /> 
+	</if> 
+</select> 
+<select id="queryEntity" resultMap="BaseResultMap" parameterType="java.lang.String">
+	select 
+	<include refid="Base_Column_List" />
+	from t_sys_dict	where id = #{id}
+</select>
+<insert id="insert" parameterType="com.person.web.admin.model.SysDict"> 
+	insert into t_sys_dict
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		<if test="id != null"> 
+			id,
+		</if>
+		<if test="dictCode != null"> 
+			dict_code,
+		</if>
+		<if test="dictValue != null"> 
+			dict_value,
+		</if>
+		<if test="dictRemark != null"> 
+			dict_remark,
+		</if>
+	</trim>
+	values
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+	<if test="id != null"> 
+		#{id},
+	</if>
+	<if test="dictCode != null"> 
+		#{dictCode},
+	</if>
+	<if test="dictValue != null"> 
+		#{dictValue},
+	</if>
+	<if test="dictRemark != null"> 
+		#{dictRemark},
+	</if>
+	</trim>
+</insert>
+<update id="updateByCriteria" parameterType="com.person.framework.mybatis.Criteria">
+	update t_sys_dict
+	<set>
+	<if test="record.id != null"> 
+		id = #{record.id},
+	</if>
+	<if test="record.dictCode != null"> 
+		dict_code = #{record.dictCode},
+	</if>
+	<if test="record.dictValue != null"> 
+		dict_value = #{record.dictValue},
+	</if>
+	<if test="record.dictRemark != null"> 
+		dict_remark = #{record.dictRemark},
+	</if>
+	</set>
+	<if test="params != null">
+		<include refid="Criteria_Where_Clause" />
+	</if>
+</update>
+<delete id="deleteByCriteria" parameterType="com.person.framework.mybatis.Criteria">
+	delete from t_sys_dict
+	<if test="params != null">
+		<include refid="Criteria_Where_Clause" />
+	</if>
+</delete>
+<delete id="deleteById" parameterType="java.lang.String">
+	delete from t_sys_dict
+	where id = #{id}
+</delete>
+</mapper>
