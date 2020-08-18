@@ -161,7 +161,7 @@ var fnRowCallback =  function( nRow, aData, iDisplayIndex ) {
 	
 	info += "<tr>";
 	info += "<td>服务价格</td>";
-	info += "<td>"+ goodsInfo.price +"</td>";
+	info += "<td>￥"+ goodsInfo.price + (goodsInfo.dayNum ? (" X "+ goodsInfo.dayNum) : "") + "</td>";
 	info += "</tr>";
 
 	info += "</tbody>";
