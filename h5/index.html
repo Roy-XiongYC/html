@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./style/weui.css"/>
     <link rel="stylesheet" href="./example.css"/>
 </head>
+
 <body ontouchstart>
 <div class="weui-toptips weui-toptips_warn js_tooltips">错误提示</div>
 
@@ -307,15 +308,29 @@
 							<h2 class="weui-msg__title">功能暂未开放,敬请期待...</h2>		
 						</div>	
 					</div>
-					<div  class="c3 weui-tab__content weui-msg">
-						<div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
-						<div class="weui-msg__text-area">
-							<h2 class="weui-msg__title">功能暂未开放,敬请期待...</h2>		
-						</div>	
+					<div  class="c3" style="display: none;">
+
+						<div class="page__bd" id="orderList">
+
+							<div class="page__bd page__bd_spacing">
+
+								<br>
+								<br>
+
+								<div class="weui-footer">
+
+									<p class="weui-footer__text">您还没有订单,快去下单吧!</p>
+								</div>
+								<br>
+								<br>
+								
+							</div>
+
+						</div>																	
 					</div>
 					
-					
-					<div class="c4 page__bd">
+
+					<div class="c4 page__bd" style="display: none;">
 						<div class="weui-cells">
 							<div class="weui-cell weui-cell_active">
 								<div class="weui-cell__hd" style="position: relative; margin-right: 10px;">
@@ -330,7 +345,7 @@
 							<div class="weui-cell weui-cell_active weui-cell_access">
 								<div class="weui-cell__bd">
 									<span style="vertical-align: middle;">手机</span>
-									<span style="vertical-align: middle;" id = "mobile">城市</span>
+									<span style="vertical-align: middle;" id = "mobile_1">城市</span>
 								</div>
 								
 							</div>
@@ -376,11 +391,36 @@
 						<br>
 						
 					</div>
-					
-                    
-
 
                 </div>
+				
+				<div id="dialogs">
+							<!--BEGIN dialog1-->
+							<div class="js_dialog" id="iosDialog1" style="display: none;">
+								<div class="weui-mask"></div>
+								<div class="weui-dialog" style="top: 300px;">
+									<div class="weui-dialog__hd"><strong class="weui-dialog__title">订单操作</strong></div>
+									<div class="weui-dialog__bd">确定要取消订单吗？</div>
+									<div class="weui-dialog__ft">
+										<a href="javascript:" class="weui-dialog__btn weui-dialog__btn_default" onclick="iosDialog2(0)">不取消</a>
+										<a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary" onclick="iosDialog2(1)">确认取消</a>
+									</div>
+								</div>
+							</div>
+							<!--END dialog1-->
+							<!--BEGIN dialog2-->
+							<div class="js_dialog" id="iosDialog2" style="display: none;">
+								<div class="weui-mask"></div>
+								<div class="weui-dialog">
+									<div class="weui-dialog__bd">订单已经取消成功！</div>
+									<div class="weui-dialog__ft">
+										<a href="javascript:" class="weui-dialog__btn weui-dialog__btn_primary"onclick="closeIosDialog2()">知道了</a>
+									</div>
+								</div>
+							</div>
+
+						</div>
+				
                 <div class="weui-tabbar">
 
                     <div class="weui-tabbar__item weui-bar__item_on" id="c0">
@@ -416,8 +456,164 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-				/**
+    <script type="text/javascript">		
+		var cellOrderId = '';
+		
+		function flushOrderList(){
+			$.ajax({
+				"type" : 'GET',
+				"url" : 'http://www.dikachongwu.com/weChat/shopOrder/queryPage?pageNum=1&pageSize=99999&userId=' + GetRequest().userId,
+				"dataType" : "json",
+				//"data" : params,
+				"success" : function(data) {
+					console.log(data);	
+					if(data.code == '200'){
+						var html = "";
+						var list = data.data.list;
+						debugger;
+						for (var i = 0; i < list.length; i++) {
+							console.log(list[i]);
+							var goodsInfo = JSON.parse(list[i].goodsInfo);
+
+							var orderStatus;
+							if(list[i].orderStatus=='10'){
+								orderStatus = "待付款";
+							}else if(list[i].orderStatus=='20'){
+								orderStatus = "待收货";
+							}else if(list[i].orderStatus=='30'){
+								orderStatus = "已完成";
+							}else if(list[i].orderStatus=='40'){
+								orderStatus = "已取消";
+							}else if(list[i].orderStatus=='50'){
+								orderStatus = "已支付";
+							}else if(list[i].orderStatus=='60'){
+								orderStatus = "申请预约";					
+							}else if(list[i].orderStatus=='70'){
+								orderStatus = "预约成功";
+							}else{
+								orderStatus = aData.orderStatus;
+							}
+							
+							html += '<div class="weui-form-preview">';	
+							html += '<div class="weui-form-preview__hd">';	
+							html += '<div class="weui-form-preview__item">';
+							html += '<label class="weui-form-preview__label">订单金额</label>';
+							html += '<em class="weui-form-preview__value">¥'+ list[i].orderPrice +'</em>';
+							html += '</div>';
+							html += '</div>';
+							html += '<div class="weui-form-preview__bd">';
+							html += '<div class="weui-form-preview__item">';
+							html += '<label class="weui-form-preview__label">订单编号</label>';
+							html += '<span class="weui-form-preview__value">'+ list[i].orderId +'</span>';
+							html += '</div>';
+							html += '<div class="weui-form-preview__item">';
+							html += '<label class="weui-form-preview__label">订单状态</label>';
+							html += '<span class="weui-form-preview__value">'+ orderStatus +'</span>';
+							html += '</div>';
+							html += '<div class="weui-form-preview__item">';
+							html += '<label class="weui-form-preview__label">商品</label>';
+							html += '<span class="weui-form-preview__value">'+ goodsInfo.projectName +'</span>';
+							html += '</div>';
+							html += '<div class="weui-form-preview__item">';
+							html += '<label class="weui-form-preview__label">单价</label>';
+							html += '<span class="weui-form-preview__value">'+ goodsInfo.price +'</span>';
+							html += '</div>';
+							html += '<div class="weui-form-preview__item">';
+							html += '<label class="weui-form-preview__label">宠物昵称</label>';
+							html += '<span class="weui-form-preview__value">'+ goodsInfo.petName +'</span>';
+							html += '</div>';
+							html += '<div class="weui-form-preview__item">';
+							html += '<label class="weui-form-preview__label">服务时间</label>';
+							if(goodsInfo.startFosterTime){
+								html += '<span class="weui-form-preview__value">'+ goodsInfo.startFosterTime + ' 至 '+ goodsInfo.endFosterTime + ' ('+ goodsInfo.dayNum +' 天)'+'</span>';
+							}else{
+								html += '<span class="weui-form-preview__value">'+ goodsInfo.appointedTime +'</span>';
+							}
+							html += '</div>';
+							html += '<div class="weui-form-preview__item">';
+							html += '<label class="weui-form-preview__label">服务方式</label>';
+							html += '<span class="weui-form-preview__value">'+ (goodsInfo.pickUp =='0'?'到店服务':'上门接送') +'</span>';
+							html += '</div>';
+							html += '<div class="weui-form-preview__item">';
+							html += '<label class="weui-form-preview__label">订单时间</label>';
+							html += '<span class="weui-form-preview__value">'+ list[i].createTime +'</span>';
+							html += '</div>';
+							html += '<div class="weui-form-preview__item">';
+							html += '<label class="weui-form-preview__label">备注</label>';
+							html += '<span class="weui-form-preview__value">'+ list[i].remark +'</span>';
+							html += '</div>';
+							html += '</div>';
+							html += '<div class="weui-form-preview__ft">';
+							if(list[i].orderStatus=='60'){
+								html += '<a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" onclick="iosDialog1(\''+ list[i].orderId +'\')">取消</a>';
+							}
+							
+							html += '</div>';
+							html += '</div>';
+							html += '<br>';						
+						};
+						if(html != ''){
+							$("#orderList").html(html);
+						};
+						
+
+					}else{
+						//.messager.error(data.message);
+					}
+				}
+			});
+		
+		};
+		
+		//刷下订单列表
+		function menan(){
+			debugger;
+			var _this = $('#c3')[0];
+			$(_this).addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+
+			$('.c01').hide();
+			$('.c00').hide();
+			for(var i =0;i<=5 ;++i){
+				$('.c'+ i +'').hide();
+			}
+			
+							
+			flushOrderList();				
+  
+			$('.c3').show();			
+		};
+		
+		//订单弹窗
+		function iosDialog1(id){
+			cellOrderId = id;
+			$('#iosDialog1').fadeIn(200);
+		}
+		function iosDialog2(status){
+			$('#iosDialog1').fadeOut(200);
+			if("1" == status){
+				$.ajax({
+					"type" : 'GET',
+					"url" : 'http://www.dikachongwu.com/weChat/shopOrder/updateStatus/'+ cellOrderId +'/40',
+					"dataType" : "json",
+					//"data" : params,
+					"success" : function(data) {
+						console.log(data);	
+						if(data.code == '200'){
+							$('#iosDialog2').fadeIn(200);
+							flushOrderList();
+						}else{
+							//.messager.error(data.message);
+						}
+					}
+				});
+			}			
+		}
+		
+		function closeIosDialog2(){
+			$('#iosDialog2').fadeOut(200);			
+		}
+	
+		/**
 		 * [获取URL中的参数名及参数值的集合]
 		 * 示例URL:http://htmlJsTest/getrequest.html?uid=admin&rid=1&fid=2&name=小明
 		 * @param {[string]} urlStr [当该参数不为空的时候，则解析该url中的参数集合]
@@ -435,6 +631,8 @@
 			}
 			return theRequest;
 		}
+
+		$('.c4').hide();
 
       $('#showTooltips').on('click', function(){
         if ($(this).hasClass('weui-btn_disabled')) return;
@@ -563,7 +761,8 @@
 							$succ_toast.fadeOut(100);
 						}, 2000);
 						setTimeout(function () {
-							window.history.go(0);
+							menan();
+							//window.history.go(0);
 						}, 2000);
 
 					}else{
@@ -655,7 +854,8 @@
 							$succ_toast.fadeOut(100);
 						}, 2000);
 						setTimeout(function () {
-							window.history.go(0);
+							menan();
+							//window.history.go(0);
 						}, 2000);
 
 					}else{
@@ -832,7 +1032,7 @@
 							if(data.code == '200'){
 								$('#nickName').text(data.data.nickName);
 								$("#headimgurl").attr("src",data.data.headimgurl)
-								$('#mobile').text(data.data.mobile);
+								$('#mobile_1').text(data.data.mobile);
 								$('#sex3').text(data.data.sex == "1"?'男':'女');
 								$('#country').text(data.data.country);
 								$('#province').text(data.data.province);
@@ -845,6 +1045,9 @@
 					
 				}
 				
+				if(this.id == 'c3'){							
+					flushOrderList();				
+				}
 
                 //$('.'+ this.id +'').removeClass('weui-tab__content').siblings('.weui-tab__content').addClass('weui-tab__content');
             });
@@ -1229,17 +1432,16 @@
 <script type="text/html" id="tpl_form_page">
     <div class="page">
         <div class="weui-form">
-            <div class="weui-form__text-area">
-				
-				<div class="weui-form__desc">
-					<img src="https://www.bagong.cn/jic/i/noavatar.png" id="pet_avatar" class="img-circle" >
-				</div>
-            </div>
-            <div class="weui-form__control-area">
+
+            <div class="weui-form__control-area" style="margin-top: -48px;">
 				
                 <div class="weui-cells__group weui-cells__group_form">
                     <div class="weui-cells__title"></div>
+					
                     <div class="weui-cells weui-cells_form">
+						<p>			
+							<img src="images/dag.jpg" alt="" style="max-width: 100%;">
+						</p>
 						<div class="weui-cell weui-cell_active">
                             
                             <div class="weui-cell__bd weui-cells_checkbox" id = 'petTypeId' >
@@ -1546,6 +1748,7 @@
 			}
 		});								
 	}
+
 	
 	$(function(){
 		
@@ -1600,7 +1803,7 @@
 			});
 		});
 		
-		//下拉框点击时间
+		//下拉框点击品种
 		$('#showPicker2').on('click', function () {
 			debugger;
 			$.ajax({
@@ -1637,10 +1840,9 @@
 						//.messager.error(data.message);
 					}
 				}
-			});
-			
-			
+			});	
 		});
+
 	});
 </script>
 
