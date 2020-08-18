@@ -83,18 +83,27 @@
                                          </div>
                                     </div>
 
-									<div class="weui-cell weui-cell_active weui-cell_access weui-cells weui-cells_radio" >
+
+									<div class="weui-cell weui-cell_active weui-cell_access weui-cells weui-cells_checkbox" >
                                         <div class="weui-cell__bd">上门接送</div>
                                         <div class="weui-cell weui-cell_active weui-check__label" id = "serviceType">
-                                            <input type="radio" name="radio1" class="weui-check weui-cells_radio" id="x12" checked="checked" value = "0" />
-                                            <span class="weui-icon-checked" onclick="radioBox(this)" ></span>
+                                            <input type="checkbox" class="weui-check" value = '0' checked="checked"/>			
+											<span class="weui-icon-checked" onclick="checkbox1(this)"></span>
                                             到店服务
 
-                                            <input type="radio" name="radio2" class="weui-check weui-cells_radio iradio_square-orange" id="x13" value = "1" />
-                                            <span class="weui-icon-checked" onclick="radioBox(this)"></span>
+                                            <input type="checkbox" class="weui-check" value = '1'/>								
+											<span class="weui-icon-checked" onclick="checkbox1(this)" ></span>
                                             上门接送
                                         </div>
                                     </div>
+
+									<div class="weui-cell weui-cell_active weui-cell_access" style="display: none;">
+										<div class="weui-cell__hd"><label class="weui-label">接送地址</label></div>
+										<div class="weui-cell__bd">
+											<input id="addressInfo1" class="weui-input" placeholder="填写接送地址"/>
+										</div>
+									</div>
+								
 
                                     <div class="weui-form__control-area weui-cells__group weui-cells__group_form" >
                                         <div class="weui-cells__title">备注</div>
@@ -211,20 +220,20 @@
 
                                     
 									
-									<div class="weui-cell weui-cell_active weui-cell_access weui-cells weui-cells_radio" >
+									<div class="weui-cell weui-cell_active weui-cell_access weui-cells weui-cells_checkbox" >
                                         <div class="weui-cell__bd">上门接送</div>
                                         <div class="weui-cell weui-cell_active weui-check__label" id = "serviceType1">
-                                            <input type="radio" name="radio1" class="weui-check weui-cells_radio" id="x12" checked="checked" value = "0" />
-                                            <span class="weui-icon-checked" onclick="radioBox(this)" ></span>
+                                            <input type="checkbox" class="weui-check" value = '0' checked="checked"/>			
+											<span class="weui-icon-checked" onclick="checkbox1(this)"></span>
                                             到店服务
 
-                                            <input type="radio" name="radio2" class="weui-check weui-cells_radio iradio_square-orange" id="x13" value = "1" />
-                                            <span class="weui-icon-checked" onclick="radioBox(this)"></span>
+                                            <input type="checkbox" class="weui-check" value = '1'/>								
+											<span class="weui-icon-checked" onclick="checkbox1(this)" ></span>
                                             上门接送
                                         </div>
                                     </div>
 									
-									<div class="weui-cell weui-cell_active">
+									<div class="weui-cell weui-cell_active weui-cell_access" style="display: none;">
 										<div class="weui-cell__hd"><label class="weui-label">接送地址</label></div>
 										<div class="weui-cell__bd">
 											<input id="addressInfo" class="weui-input" placeholder="填写接送地址"/>
@@ -459,6 +468,18 @@
     <script type="text/javascript">		
 		var cellOrderId = '';
 		
+		function checkbox1(_this) {
+			debugger;
+			//移除复选
+			$(_this).siblings('.weui-check').prop("checked",false);
+			$(_this).prev().prop("checked",true);
+			if($(_this).prev().val() == '1'){
+				$(_this).parent().parent().next().show();
+			}else{
+				$(_this).parent().parent().next().hide();
+			}
+		}
+		
 		function flushOrderList(){
 			$.ajax({
 				"type" : 'GET',
@@ -516,7 +537,7 @@
 							html += '</div>';
 							html += '<div class="weui-form-preview__item">';
 							html += '<label class="weui-form-preview__label">单价</label>';
-							html += '<span class="weui-form-preview__value">¥'+ goodsInfo.price +'</span>';
+							html += '<span class="weui-form-preview__value">¥'+ goodsInfo.price +(goodsInfo.dayNum? ' X ' + goodsInfo.dayNum:'')+ '</span>';
 							html += '</div>';
 							html += '<div class="weui-form-preview__item">';
 							html += '<label class="weui-form-preview__label">宠物昵称</label>';
@@ -534,6 +555,13 @@
 							html += '<label class="weui-form-preview__label">服务方式</label>';
 							html += '<span class="weui-form-preview__value">'+ (goodsInfo.pickUp =='0'?'到店服务':'上门接送') +'</span>';
 							html += '</div>';
+							
+							if(goodsInfo.pickUp == '1'){
+								html += '<div class="weui-form-preview__item">';
+								html += '<label class="weui-form-preview__label">接送地址</label>';
+								html += '<span class="weui-form-preview__value">'+ list[i].addressInfo +'</span>';
+								html += '</div>';
+							}						
 							html += '<div class="weui-form-preview__item">';
 							html += '<label class="weui-form-preview__label">订单时间</label>';
 							html += '<span class="weui-form-preview__value">'+ list[i].createTime +'</span>';
@@ -701,7 +729,7 @@
 			}
 			
 			//服务类型
-			if( $($('#serviceType1').children("input[type=radio]:checked")[0]).length == 0){
+			if($('#serviceType1').children("input[type=checkbox]:checked").length == 0){
 				$('#errorText1').text('请选择接送方式！');
 				$fail_toast.fadeIn(100);
 				setTimeout(function () {
@@ -711,7 +739,7 @@
 			}
 			
 			//接送地址
-			if(!$('#addressInfo').val()){
+			if($('#serviceType1').children("input[type=checkbox]:checked").val() == '1' && !$('#addressInfo').val()){
 				$('#errorText1').text('请填写接送地址！');
 				$fail_toast.fadeIn(100);
 				setTimeout(function () {
@@ -729,7 +757,7 @@
 			var goodsInfo = {
 				"petId": $('#petId1').val(),
 				"serviceId": $('#serviceClass1').prev().val(),
-				"pickUp": $($('#serviceType1').children("input[type=radio]:checked")[0]).val(),
+				"pickUp": parseInt($('#serviceType1').children("input[type=checkbox]:checked").val()),
 				"vaccines": $("#vaccines1").get(0).checked,
 				"startFosterTime": $('#startFosterTime').val(),
 				"endFosterTime": $('#endFosterTime').val(),
@@ -810,8 +838,18 @@
 			}
 			
 			//预约时间
-			if( $($('#serviceType').children("input[type=radio]:checked")[0]).length == 0){
+			if($('#serviceType').children("input[type=checkbox]:checked").length == 0){
 				$('#errorText').text('请选择接送方式！');
+				$fail_toast.fadeIn(100);
+				setTimeout(function () {
+					$fail_toast.fadeOut(100);
+				}, 2000);
+				return;
+			}
+			
+						//接送地址
+			if($('#serviceType').children("input[type=checkbox]:checked").val() == '1' && !$('#addressInfo1').val()){
+				$('#errorText').text('请填写接送地址！');
 				$fail_toast.fadeIn(100);
 				setTimeout(function () {
 					$fail_toast.fadeOut(100);
@@ -826,7 +864,7 @@
 				"appointedTime": $('#appointedTime').val(),
 				"petId": $('#petId').val(),
 				"serviceId": $('#serviceClass').prev().val(),
-				"pickUp": $($('#serviceType').children("input[type=radio]:checked")[0]).val(),
+				"pickUp": parseInt($('#serviceType').children("input[type=checkbox]:checked").val()),
 				"vaccines": $("#vaccines").get(0).checked
 			};
 			debugger;
@@ -834,7 +872,8 @@
 			    "orderType": "10",	
 			    "userId": GetRequest().userId,
 			    "goodsInfo": JSON.stringify(goodsInfo ),
-			    "remark": $('#remark').val()
+			    "remark": $('#remark').val(),
+				"addressInfo": $('#addressInfo1').val()
 			};
 			
 			$.ajax({
